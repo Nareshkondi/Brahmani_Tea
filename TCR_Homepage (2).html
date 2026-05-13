@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCR — The Capital Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #b8952a; --gold-lt: #c9a83c; --gold-border: rgba(184,149,42,0.2);
+    --white: #ffffff; --off: #fafaf8; --parchment: #f5f2ed;
+    --ink: #0d0d0b; --i80: rgba(13,13,11,0.80); --i55: rgba(13,13,11,0.55);
+    --i30: rgba(13,13,11,0.30); --i12: rgba(13,13,11,0.12); --i06: rgba(13,13,11,0.06);
+    --green: #1a6b3c; --green-bg: rgba(26,107,60,0.07);
+    --purple: #534AB7; --teal: #0f6e56; --blue: #1a3a6b;
+    --serif: 'Playfair Display',Georgia,serif;
+    --sans: 'DM Sans',system-ui,sans-serif;
+    --mono: 'DM Mono','Courier New',monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--white); color: var(--ink); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top:0; left:0; right:0; z-index:100; height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 60px; background:rgba(255,255,255,0.96); backdrop-filter:blur(14px); border-bottom:0.5px solid var(--i12); transition:transform .3s ease; }
+  .nav-logo { display:flex; align-items:baseline; gap:10px; text-decoration:none; }
+  .nav-wm { font-family:var(--serif); font-size:21px; font-weight:600; color:var(--ink); letter-spacing:-.3px; }
+  .nav-wm span { color:var(--gold); }
+  .nav-tag { font-family:var(--mono); font-size:8.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--i55); padding-bottom:2px; }
+  .nav-links { display:flex; align-items:center; gap:34px; list-style:none; }
+  .nav-links a { font-size:13px; color:var(--i80); text-decoration:none; transition:color .18s; }
+  .nav-links a:hover { color:var(--gold); }
+  .nav-cta { background:var(--ink) !important; color:var(--white) !important; padding:9px 22px; border-radius:2px; font-size:11.5px !important; letter-spacing:.09em; text-transform:uppercase; transition:background .2s !important; }
+  .nav-cta:hover { background:var(--gold) !important; }
+
+  /* HERO */
+  .hero { min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; padding:0 60px 96px; position:relative; overflow:hidden; }
+  .hero-grid { position:absolute; inset:0; pointer-events:none; background-image:linear-gradient(var(--i06) .5px,transparent .5px),linear-gradient(90deg,var(--i06) .5px,transparent .5px); background-size:72px 72px; mask-image:radial-gradient(ellipse 90% 70% at 65% 50%,black,transparent); }
+  .hero-line { position:absolute; top:28%; right:-5%; width:52%; height:.5px; background:linear-gradient(90deg,transparent,var(--gold-border),transparent); transform:rotate(-6deg); }
+
+  /* Live signal bar — top of hero */
+  .hero-signal {
+    position:absolute; top:84px; left:60px; right:60px;
+    display:flex; align-items:center; gap:20px;
+    padding:12px 20px;
+    border:.5px solid var(--i06);
+    background:var(--off);
+  }
+  .hs-pulse { width:7px; height:7px; border-radius:50%; background:var(--green); flex-shrink:0; animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.85)} }
+  .hs-text { font-family:var(--mono); font-size:10px; letter-spacing:.08em; color:var(--i55); }
+  .hs-text strong { color:var(--ink); font-weight:500; }
+  .hs-divider { width:.5px; height:14px; background:var(--i12); }
+
+  .hero-ey { font-family:var(--mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:26px; display:flex; align-items:center; gap:14px; }
+  .hero-ey::before { content:''; display:block; width:28px; height:.5px; background:var(--gold); }
+  .hero-h1 { font-family:var(--serif); font-size:clamp(44px,5.5vw,82px); font-weight:400; line-height:1.06; letter-spacing:-1.5px; color:var(--ink); max-width:820px; margin-bottom:32px; }
+  .hero-h1 em { font-style:italic; color:var(--gold); }
+  .hero-sub { font-size:17px; font-weight:300; line-height:1.75; color:var(--i80); max-width:480px; margin-bottom:52px; }
+
+  .hero-acts { display:flex; align-items:center; gap:28px; flex-wrap:wrap; }
+  .btn-p { display:inline-flex; align-items:center; gap:10px; background:var(--ink); color:var(--white); font-size:11.5px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; padding:15px 34px; border-radius:2px; text-decoration:none; transition:background .22s,transform .15s; }
+  .btn-p:hover { background:var(--gold); transform:translateY(-1px); }
+  .btn-p svg { width:13px; height:13px; stroke:currentColor; fill:none; transition:transform .2s; }
+  .btn-p:hover svg { transform:translateX(3px); }
+  .btn-g { font-size:13px; color:var(--i80); text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-bottom:1px solid var(--i30); padding-bottom:2px; transition:color .18s,border-color .18s; }
+  .btn-g:hover { color:var(--gold); border-color:var(--gold); }
+
+  .hero-aside { position:absolute; right:60px; bottom:96px; display:flex; flex-direction:column; align-items:flex-end; gap:22px; }
+  .hs-s { text-align:right; }
+  .hs-num { font-family:var(--mono); font-size:26px; font-weight:500; color:var(--ink); display:block; }
+  .hs-lbl { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--i55); }
+  .hs-rule { width:.5px; height:34px; background:var(--i30); margin-left:auto; }
+
+  /* TICKER */
+  .ticker { border-top:.5px solid var(--i12); border-bottom:.5px solid var(--i12); background:var(--parchment); padding:13px 0; overflow:hidden; }
+  .ticker-track { display:flex; width:max-content; animation:tick 52s linear infinite; }
+  .ticker-track:hover { animation-play-state:paused; }
+  @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .ti { display:flex; align-items:center; gap:10px; padding:0 36px; border-right:.5px solid var(--i12); white-space:nowrap; font-family:var(--mono); font-size:10.5px; letter-spacing:.05em; color:var(--i80); }
+  .td { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+
+  /* SECTIONS */
+  section { padding:112px 60px; }
+  .sl { font-family:var(--mono); font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+  .sl::before { content:''; display:block; width:28px; height:.5px; background:var(--gold); }
+  .sh { font-family:var(--serif); font-size:clamp(30px,3.8vw,52px); font-weight:400; line-height:1.1; letter-spacing:-.8px; color:var(--ink); }
+  .sh em { font-style:italic; color:var(--gold); }
+  .sb { font-size:15.5px; font-weight:300; line-height:1.75; color:var(--i80); max-width:460px; margin-top:18px; }
+
+  /* ALREADY WORKING — proof strip */
+  .proof-strip { background:var(--ink); padding:40px 60px; display:flex; align-items:center; justify-content:space-between; gap:32px; border-top:.5px solid rgba(255,255,255,.06); }
+  .proof-label { font-family:var(--mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.28); white-space:nowrap; }
+  .proof-items { display:flex; align-items:center; gap:0; flex:1; }
+  .proof-item { display:flex; flex-direction:column; gap:3px; padding:0 40px; border-right:.5px solid rgba(255,255,255,.1); }
+  .proof-item:first-child { padding-left:0; }
+  .proof-item:last-child { border-right:none; }
+  .proof-num { font-family:var(--serif); font-size:28px; font-weight:400; color:var(--white); line-height:1; }
+  .proof-num em { color:var(--gold); font-style:normal; }
+  .proof-desc { font-size:12px; font-weight:300; color:rgba(255,255,255,.45); line-height:1.4; }
+
+  /* PILLARS */
+  .pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--i12); border:.5px solid var(--i12); margin-top:64px; }
+  .pillar { background:var(--white); padding:44px 36px; transition:background .22s; }
+  .pillar:hover { background:var(--off); }
+  .p-num { font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--i30); margin-bottom:28px; }
+  .p-icon { color:var(--gold); margin-bottom:20px; }
+  .p-icon svg { width:32px; height:32px; stroke:currentColor; fill:none; stroke-width:1.2; }
+  .p-title { font-family:var(--serif); font-size:19px; font-weight:500; color:var(--ink); margin-bottom:12px; line-height:1.2; }
+  .p-body { font-size:13.5px; font-weight:300; line-height:1.75; color:var(--i80); }
+  .vpill { display:inline-flex; align-items:center; gap:5px; margin-top:18px; font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--green); background:var(--green-bg); padding:4px 11px; border-radius:2px; }
+  .vpill::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--green); }
+
+  /* SEGMENTS */
+  .serve-dark { background:var(--ink); }
+  .serve-dark .sl { color:var(--gold); }
+  .serve-dark .sl::before { background:var(--gold); }
+  .serve-dark .sh { color:var(--white); }
+  .serve-dark .sb { color:rgba(255,255,255,.55); }
+  .segs { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:rgba(255,255,255,.06); border:.5px solid rgba(255,255,255,.06); margin-top:60px; }
+  .seg { background:var(--ink); padding:36px 28px; transition:background .22s; cursor:default; }
+  .seg:hover { background:#171714; }
+  .seg-bar { height:2px; margin-bottom:28px; border-radius:1px; }
+  .seg-who { font-family:var(--mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; margin-bottom:12px; }
+  .seg-title { font-family:var(--serif); font-size:17px; font-weight:400; color:var(--white); margin-bottom:16px; line-height:1.25; }
+  /* Pain — now a scene, not a list */
+  .seg-pain { font-size:12.5px; font-weight:300; line-height:1.75; color:rgba(255,255,255,.52); margin-bottom:22px; font-style:italic; border-left:1.5px solid rgba(255,255,255,.1); padding-left:14px; }
+  .seg-offs { display:flex; flex-direction:column; gap:8px; }
+  .seg-off { font-size:12px; color:rgba(255,255,255,.42); display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
+  .seg-off::before { content:'—'; flex-shrink:0; }
+  .seg-plbl { font-family:var(--mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.25); margin-top:26px; margin-bottom:4px; }
+  .seg-price { font-family:var(--mono); font-size:14px; font-weight:500; }
+  .seg-pnote { font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.35); }
+
+  /* WELL CAPITALISED */
+  .wc-layout { display:grid; grid-template-columns:1fr 1fr; gap:96px; align-items:center; }
+  .wc-right { display:flex; flex-direction:column; gap:14px; }
+  .wc-card { border:.5px solid var(--i12); padding:28px 30px; background:var(--white); transition:border-color .2s; }
+  .wc-card:hover { border-color:var(--gold-border); }
+  .wc-clbl { font-family:var(--mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; margin-bottom:10px; }
+  .wc-ctitle { font-family:var(--serif); font-size:17px; font-weight:500; color:var(--ink); margin-bottom:10px; }
+  .wc-cbody { font-size:13px; font-weight:300; line-height:1.72; color:var(--i80); }
+  .wc-rule { font-size:12.5px; font-weight:300; line-height:1.7; color:var(--i80); display:flex; gap:12px; padding:14px 0; border-bottom:.5px solid var(--i06); }
+  .wc-rule:last-child { border-bottom:none; }
+  .wc-rule::before { content:'—'; color:var(--gold); flex-shrink:0; }
+
+  /* INTELLIGENCE */
+  .intel-bg { background:var(--parchment); }
+  .intel-layout { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; margin-top:64px; }
+  .dc { background:var(--white); border:.5px solid var(--i12); border-radius:2px; overflow:hidden; margin-bottom:14px; }
+  .dc-hdr { padding:18px 24px; border-bottom:.5px solid var(--i12); display:flex; align-items:center; justify-content:space-between; }
+  .dc-ttl { font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--i55); }
+  .live { display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--green); }
+  .live::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--green); animation:blink 2s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+  .fr { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:.5px solid var(--i06); transition:background .15s; }
+  .fr:last-child { border-bottom:none; }
+  .fr:hover { background:var(--off); }
+  .fr-nm { font-size:13.5px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+  .fr-mt { font-family:var(--mono); font-size:10px; color:var(--i55); }
+  .fr-cp { font-family:var(--mono); font-size:13.5px; font-weight:500; color:var(--ink); }
+  .fr-tg { font-family:var(--mono); font-size:9px; color:var(--green); }
+  .sc { background:var(--white); border:.5px solid var(--i12); border-radius:2px; overflow:hidden; }
+  .srows { padding:18px 24px; display:flex; flex-direction:column; gap:13px; }
+  .srow { display:flex; align-items:center; gap:12px; }
+  .slbl { font-family:var(--mono); font-size:10.5px; color:var(--i80); width:76px; flex-shrink:0; }
+  .strk { flex:1; height:2.5px; background:var(--i06); border-radius:2px; overflow:hidden; }
+  .sfill { height:100%; border-radius:2px; }
+  .sval { font-family:var(--mono); font-size:10.5px; width:30px; text-align:right; }
+
+  /* VERIFY */
+  .verify-layout { display:grid; grid-template-columns:520px 1fr; gap:96px; align-items:start; }
+  .steps { margin-top:44px; }
+  .step { display:flex; gap:28px; padding:32px 0; border-bottom:.5px solid var(--i12); }
+  .step:first-child { border-top:.5px solid var(--i12); }
+  .sn { font-family:var(--mono); font-size:10px; letter-spacing:.1em; color:var(--i30); flex-shrink:0; padding-top:3px; width:30px; }
+  .st { font-size:15px; font-weight:500; color:var(--ink); margin-bottom:8px; }
+  .sbody { font-size:13.5px; font-weight:300; color:var(--i80); line-height:1.7; }
+  .mca { border:.5px solid var(--i12); border-radius:2px; overflow:hidden; position:sticky; top:90px; }
+  .mca-hd { background:var(--parchment); padding:18px 24px; border-bottom:.5px solid var(--i12); display:flex; align-items:center; justify-content:space-between; }
+  .mca-t { font-size:13.5px; font-weight:500; color:var(--ink); }
+  .mca-cin { font-family:var(--mono); font-size:9.5px; color:var(--i55); margin-top:2px; }
+  .mca-stamp { font-family:var(--mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--green); border:.5px solid var(--green); padding:4px 9px; border-radius:2px; }
+  .mf { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 24px; border-bottom:.5px solid var(--i06); }
+  .mf:last-child { border-bottom:none; }
+  .mk { font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--i55); flex-shrink:0; }
+  .mv { font-family:var(--mono); font-size:12.5px; color:var(--ink); text-align:right; }
+  .mv.g { color:var(--green); }
+  .mv.gd { color:var(--gold); }
+
+  /* PULSE */
+  .pulse-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:60px; }
+  .pc { border:.5px solid var(--i12); padding:26px; transition:border-color .2s,transform .2s; }
+  .pc:hover { border-color:var(--gold-border); transform:translateY(-2px); }
+  .pc-sec { font-family:var(--mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--i55); margin-bottom:14px; }
+  .pc-sig { display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+  .pc-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .pc-st { font-size:13px; font-weight:500; color:var(--ink); }
+  .pc-num { font-family:var(--mono); font-size:22px; font-weight:500; color:var(--ink); margin-top:12px; }
+  .pc-nl { font-family:var(--mono); font-size:9.5px; color:var(--i55); margin-bottom:16px; }
+  .pc-bar { height:2px; background:var(--i06); border-radius:2px; overflow:hidden; }
+  .pc-bf { height:100%; border-radius:2px; }
+
+  /* QUOTE */
+  .quote-wrap { border-top:.5px solid var(--i12); border-bottom:.5px solid var(--i12); background:var(--parchment); padding:96px 60px; display:flex; align-items:center; justify-content:center; }
+  .quote-inner { max-width:580px; text-align:center; }
+  .qm { font-family:var(--serif); font-size:64px; line-height:.4; color:var(--gold); display:block; margin-bottom:28px; }
+  .qt { font-family:var(--serif); font-size:23px; font-weight:400; line-height:1.55; color:var(--ink); font-style:italic; margin-bottom:28px; }
+  .qa { font-family:var(--mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--i55); }
+
+  /* CTA */
+  .cta-section { background:var(--ink); padding:112px 60px; }
+  .cta-layout { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+  .cta-left .sh { color:var(--white); }
+  .cta-left .sl { color:var(--gold); }
+  .cta-left .sl::before { background:var(--gold); }
+  .cta-left .sb { color:rgba(255,255,255,.55); max-width:400px; }
+  .cta-boxes { display:flex; flex-direction:column; gap:1px; background:rgba(255,255,255,.08); border:.5px solid rgba(255,255,255,.08); }
+  .cta-box { background:var(--ink); padding:36px; transition:background .2s; }
+  .cta-box:hover { background:#181714; }
+  .cbl { font-family:var(--mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  .cbt { font-family:var(--serif); font-size:19px; font-weight:400; color:var(--white); margin-bottom:10px; }
+  .cbb { font-size:13.5px; font-weight:300; color:rgba(255,255,255,.50); line-height:1.72; margin-bottom:22px; }
+  .btn-p-light { display:inline-flex; align-items:center; gap:10px; background:var(--white); color:var(--ink); font-size:11.5px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; padding:13px 28px; border-radius:2px; text-decoration:none; transition:background .2s; }
+  .btn-p-light:hover { background:var(--gold); color:var(--white); }
+  .btn-g-light { font-size:13px; color:rgba(255,255,255,.55); text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-bottom:1px solid rgba(255,255,255,.2); padding-bottom:2px; transition:color .18s,border-color .18s; }
+  .btn-g-light:hover { color:var(--gold); border-color:var(--gold); }
+
+  /* FOOTER */
+  footer { background:#080807; padding:68px 60px 44px; }
+  .ft-top { display:grid; grid-template-columns:300px 1fr; gap:80px; padding-bottom:52px; border-bottom:.5px solid rgba(255,255,255,.07); margin-bottom:36px; }
+  .ft-wm { font-family:var(--serif); font-size:22px; font-weight:600; color:var(--white); display:block; margin-bottom:14px; }
+  .ft-wm span { color:var(--gold); }
+  .ft-tag { font-size:13px; font-weight:300; line-height:1.7; color:rgba(255,255,255,.36); margin-bottom:22px; }
+  .ft-fine { font-family:var(--mono); font-size:9px; letter-spacing:.06em; color:rgba(255,255,255,.18); line-height:1.7; }
+  .ft-links { display:grid; grid-template-columns:repeat(3,1fr); gap:44px; }
+  .ft-ctitle { font-family:var(--mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.22); margin-bottom:18px; }
+  .ft-col a { display:block; font-size:13px; color:rgba(255,255,255,.42); text-decoration:none; margin-bottom:11px; transition:color .18s; }
+  .ft-col a:hover { color:var(--gold); }
+  .ft-bot { display:flex; align-items:center; justify-content:space-between; }
+  .ft-copy { font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; color:rgba(255,255,255,.2); }
+  .ft-reg { font-family:var(--mono); font-size:9.5px; color:rgba(255,255,255,.2); display:flex; align-items:center; gap:18px; }
+
+  /* ONLY TCR */
+  .only-section { background:var(--ink); padding:96px 60px; }
+  .only-section .sl { color:var(--gold); }
+  .only-section .sl::before { background:var(--gold); }
+  .only-section .sh { color:var(--white); max-width:560px; }
+  .only-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,.07); border:.5px solid rgba(255,255,255,.07); margin-top:56px; }
+  .only-cell { background:var(--ink); padding:40px 36px; transition:background .2s; }
+  .only-cell:hover { background:#181714; }
+  .only-num { font-family:var(--mono); font-size:9px; letter-spacing:.18em; color:var(--gold); margin-bottom:20px; display:block; }
+  .only-title { font-family:var(--serif); font-size:20px; font-weight:400; color:var(--white); margin-bottom:12px; line-height:1.2; }
+  .only-body { font-size:13.5px; font-weight:300; line-height:1.75; color:rgba(255,255,255,.52); }
+  .only-tag { display:inline-flex; align-items:center; gap:5px; margin-top:18px; font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); border:.5px solid var(--gold-border); padding:4px 11px; border-radius:2px; }
+
+  /* SEGMENTS — extended to 7 */
+  .segs-row1 { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:rgba(255,255,255,.06); border:.5px solid rgba(255,255,255,.06); margin-top:60px; }
+  .segs-row2 { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,.06); border:.5px solid rgba(255,255,255,.06); border-top:none; }
+
+  /* TRANSACTIONS STRIP */
+  .tx-strip { background:var(--parchment); border-top:.5px solid var(--i12); border-bottom:.5px solid var(--i12); padding:56px 60px; }
+  .tx-layout { display:grid; grid-template-columns:380px 1fr; gap:80px; align-items:center; }
+  .tx-flows { display:flex; flex-direction:column; gap:14px; }
+  .tx-flow { display:flex; align-items:center; gap:16px; padding:18px 24px; background:var(--white); border:.5px solid var(--i12); }
+  .tx-flow-from { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--ink); }
+  .tx-flow-arrow { font-family:var(--mono); font-size:11px; color:var(--gold); flex-shrink:0; }
+  .tx-flow-to { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--ink); }
+  .tx-flow-type { font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--i55); margin-left:auto; white-space:nowrap; }
+
+  /* ANIMATIONS */
+  .fade { opacity:0; transform:translateY(20px); transition:opacity .65s ease,transform .65s ease; }
+  .fade.in { opacity:1; transform:translateY(0); }
+  .d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
+  .counter { display:inline-block; }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="nav-logo" href="#">
+    <span class="nav-wm">T<span>C</span>R</span>
+    <span class="nav-tag">The Capital Room</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#who">Who We Serve</a></li>
+    <li><a href="#transactions">Capital Flows</a></li>
+    <li><a href="#wc">TCR Ecosystem</a></li>
+    <li><a href="#intel">Intelligence</a></li>
+    <li><a href="#access" class="nav-cta">Request Access</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-line"></div>
+
+  <!-- Live operational signal bar -->
+  <div class="hero-signal">
+    <div class="hs-pulse"></div>
+    <span class="hs-text"><strong>Currently operating as a service.</strong> The platform is in build. The work has already begun.</span>
+    <div class="hs-divider"></div>
+    <span class="hs-text">Platform launching <strong>Q3 2025.</strong> Founding access now open.</span>
+  </div>
+
+  <div class="hero-ey">The Capital Room</div>
+
+  <h1 class="hero-h1">
+    The infrastructure<br>India's private capital<br>market has been <em>without.</em>
+  </h1>
+
+  <p class="hero-sub">
+    TCR is the platform through which India's private capital market operates with structure. Verified intelligence, governed peer access, and capital connectivity — for fund managers, allocators, investment professionals, founders, corporates, and the women professionals that every other platform treats as an afterthought.
+  </p>
+
+  <div class="hero-acts">
+    <a href="#who" class="btn-p">
+      Find Your Access Point
+      <svg viewBox="0 0 24 24" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <a href="#wc" class="btn-g">How the TCR Ecosystem works</a>
+  </div>
+
+  <div class="hero-aside">
+    <div class="hs-s">
+      <span class="hs-num">5</span>
+      <span class="hs-lbl">Participant Segments</span>
+    </div>
+    <div class="hs-rule"></div>
+    <div class="hs-s">
+      <span class="hs-num">6</span>
+      <span class="hs-lbl">Sector Intelligence Layers</span>
+    </div>
+    <div class="hs-rule"></div>
+    <div class="hs-s">
+      <span class="hs-num">Q3 '25</span>
+      <span class="hs-lbl">Platform Launch</span>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ti"><span class="td" style="background:var(--green)"></span>GP ↔ LP · Startup ↔ Fund · Corporate ↔ Market · Capital moves on TCR</div>
+    <div class="ti"><span class="td" style="background:var(--purple)"></span>Women Professionals in PE/VC · Peer Rooms · Career Intelligence · Deal Access</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>Fintech · High Momentum · 90-day Sector Intelligence</div>
+    <div class="ti"><span class="td" style="background:var(--green)"></span>MCA Cross-Reference · SEBI AIF Registration · Primary Source Standard</div>
+    <div class="ti"><span class="td" style="background:var(--blue)"></span>IB Blind Matching · Your Brand · Our Network · Silent Infrastructure</div>
+    <div class="ti"><span class="td" style="background:#6b3a8a)"></span>Corporates · AIF Allocation · M&amp;A · Strategic Co-investment</div>
+    <div class="ti"><span class="td" style="background:var(--purple)"></span>TCR Ecosystem · Quarterly In-Person · LP/GP Roundtable · Employer-Blind</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>LPs · Structured GP Pipeline · No Placement Conflict · Independent Diligence</div>
+    <div class="ti"><span class="td" style="background:var(--teal)"></span>Founders · Series A+ · Healthcare · Fintech · Deeptech — Qualified Entry</div>
+    <div class="ti"><span class="td" style="background:var(--green)"></span>Capital Readiness Assessment · LP Sequencing · First Close Advisory</div>
+    <!-- duplicate -->
+    <div class="ti"><span class="td" style="background:var(--green)"></span>GP ↔ LP · Startup ↔ Fund · Corporate ↔ Market · Capital moves on TCR</div>
+    <div class="ti"><span class="td" style="background:var(--purple)"></span>Women Professionals in PE/VC · Peer Rooms · Career Intelligence · Deal Access</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>Fintech · High Momentum · 90-day Sector Intelligence</div>
+    <div class="ti"><span class="td" style="background:var(--green)"></span>MCA Cross-Reference · SEBI AIF Registration · Primary Source Standard</div>
+    <div class="ti"><span class="td" style="background:var(--blue)"></span>IB Blind Matching · Your Brand · Our Network · Silent Infrastructure</div>
+    <div class="ti"><span class="td" style="background:#6b3a8a)"></span>Corporates · AIF Allocation · M&amp;A · Strategic Co-investment</div>
+    <div class="ti"><span class="td" style="background:var(--purple)"></span>TCR Ecosystem · Quarterly In-Person · LP/GP Roundtable · Employer-Blind</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>LPs · Structured GP Pipeline · No Placement Conflict · Independent Diligence</div>
+    <div class="ti"><span class="td" style="background:var(--teal)"></span>Founders · Series A+ · Healthcare · Fintech · Deeptech — Qualified Entry</div>
+    <div class="ti"><span class="td" style="background:var(--green)"></span>Capital Readiness Assessment · LP Sequencing · First Close Advisory</div>
+  </div>
+</div>
+
+<!-- PROOF STRIP — what is true right now -->
+<div class="proof-strip">
+  <div class="proof-label">What exists today</div>
+  <div class="proof-items">
+    <div class="proof-item">
+      <div class="proof-num">7</div>
+      <div class="proof-desc">Participant segments,<br>each independently structured</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-num">4</div>
+      <div class="proof-desc">Capital flow types<br>the platform connects</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-num">6</div>
+      <div class="proof-desc">Sector intelligence<br>layers in build</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-num" style="font-size:18px">MCA + SEBI</div>
+      <div class="proof-desc">Verification standard<br>every fund will be held to</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-num" style="font-size:20px">Q3 '25</div>
+      <div class="proof-desc">Platform launch.<br>Founding access open now.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PLATFORM — reframed as problems solved, not features listed -->
+<section id="platform">
+  <div class="sl">What TCR Addresses</div>
+  <h2 class="sh">Structural gaps.<br>One <em>designed response.</em></h2>
+  <p class="sb">India's private capital market operates on information that is either unavailable, unverified, or accessible only through personal networks. TCR is built to change the structural conditions — not to aggregate what already exists.</p>
+
+  <div class="pillars">
+    <div class="pillar fade">
+      <div class="p-num">01</div>
+      <div class="p-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="1"/><line x1="3" y1="13" x2="29" y2="13"/><line x1="11" y1="7" x2="11" y2="25"/></svg></div>
+      <div class="p-title">Fund verification, from primary source</div>
+      <p class="p-body">Every fund cross-referenced against MCA filings and SEBI AIF registrations. Corpus, personnel, and portfolio entities drawn from public record. What the GP adds is separated and labelled.</p>
+      <div class="vpill">MCA + SEBI Standard</div>
+    </div>
+    <div class="pillar fade d1">
+      <div class="p-num">02</div>
+      <div class="p-icon"><svg viewBox="0 0 32 32"><path d="M4 24 L10 16 L16 20 L22 10 L28 14"/><circle cx="28" cy="8" r="3.5"/></svg></div>
+      <div class="p-title">Sector intelligence, built for allocation</div>
+      <p class="p-body">Deployment momentum signals across six verticals — Fintech, SaaS, Consumer, Healthtech, Deep Tech, EdTech. Updated continuously. Linked to the verified funds operating in each space.</p>
+    </div>
+    <div class="pillar fade d2">
+      <div class="p-num">03</div>
+      <div class="p-icon"><svg viewBox="0 0 32 32"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><line x1="18" y1="18" x2="28" y2="28"/></svg></div>
+      <div class="p-title">GP discovery, structured for diligence</div>
+      <p class="p-body">Standardised profiles across every verified fund — investment thesis, stage, sector, portfolio construction, LP readiness assessment. Comparable across strategies. Not editorially curated.</p>
+      <div class="vpill">MCA Sourced</div>
+    </div>
+    <div class="pillar fade d1">
+      <div class="p-num">04</div>
+      <div class="p-icon"><svg viewBox="0 0 32 32"><circle cx="8" cy="8" r="3.5"/><circle cx="24" cy="8" r="3.5"/><circle cx="16" cy="24" r="3.5"/><line x1="8" y1="11.5" x2="16" y2="20.5"/><line x1="24" y1="11.5" x2="16" y2="20.5"/><line x1="11.5" y1="8" x2="20.5" y2="8"/></svg></div>
+      <div class="p-title">Peer intelligence, structurally protected</div>
+      <p class="p-body">Seniority-tiered community rooms for investment professionals — compensation, carry, IC access, attribution. Employer-blind by architecture. The rules are non-negotiable and uniformly enforced.</p>
+    </div>
+    <div class="pillar fade d2">
+      <div class="p-num">05</div>
+      <div class="p-icon"><svg viewBox="0 0 32 32"><rect x="3" y="14" width="7" height="12"/><rect x="12" y="9" width="7" height="17"/><rect x="22" y="4" width="7" height="22"/></svg></div>
+      <div class="p-title">LP access, without intermediary conflict</div>
+      <p class="p-body">Mandate-matched GP introductions, independent diligence support, and peer roundtables for institutional allocators and family offices. No referral incentive. No placement fee. No conflict.</p>
+    </div>
+    <div class="pillar fade d3">
+      <div class="p-num">06</div>
+      <div class="p-icon"><svg viewBox="0 0 32 32"><path d="M16 3 L29 10.5 V21.5 L16 29 L3 21.5 V10.5 Z"/><path d="M16 9 L24 13.5 V19 L16 23.5 L8 19 V13.5 Z"/><circle cx="16" cy="16" r="2.5"/></svg></div>
+      <div class="p-title">Captable data, from public filings</div>
+      <p class="p-body">Ownership, round history, and investor participation across portfolio companies in the Indian startup and PE ecosystem — sourced from public disclosures, structured for systematic use.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE SERVE -->
+<section id="who" class="serve-dark">
+  <div class="sl">Seven Participant Types</div>
+  <h2 class="sh">Every serious participant<br>in India's allocation chain<br><em>has a place here.</em></h2>
+  <p class="sb">TCR is not a general platform. Each participant type has its own qualified entry criteria, its own intelligence layer, and its own access structure. The architecture is deliberate. So is the inclusion.</p>
+
+  <div class="segs-row1">
+    <div class="seg fade">
+      <div class="seg-bar" style="background:#534AB7"></div>
+      <div class="seg-who" style="color:#7F77DD">Investment Professionals</div>
+      <div class="seg-title">PE/VC, growth equity, and family office professionals at every level.</div>
+      <p class="seg-pain">The information that matters most to a professional's career — compensation, carry benchmarks, IC access, fund trajectory — is structurally unavailable. TCR provides it, with the seniority protections that make candour possible.</p>
+      <div class="seg-offs">
+        <div class="seg-off">Seniority-matched peer rooms — employer-blind, level-enforced</div>
+        <div class="seg-off">Anonymous compensation and carry benchmarking by fund size</div>
+        <div class="seg-off">TCR Ecosystem roundtable access from VP/Principal tier</div>
+        <div class="seg-off">LP introduction programme for Partner and Emerging GP tier</div>
+        <div class="seg-off">GP readiness assessment and first close advisory</div>
+      </div>
+      <div class="seg-plbl">Individual · 3 tiers · Qualification by role and seniority</div>
+    </div>
+
+    <div class="seg fade d1">
+      <div class="seg-bar" style="background:#1a6b3c"></div>
+      <div class="seg-who" style="color:#2a8a50">Fund Managers (GPs)</div>
+      <div class="seg-title">Emerging fund managers operating without institutional fundraising infrastructure.</div>
+      <p class="seg-pain">An emerging GP manages investment execution, LP relations, regulatory compliance, and fundraising with the same team simultaneously. TCR provides the LP access, positioning, and intelligence layer that established funds take for granted.</p>
+      <div class="seg-offs">
+        <div class="seg-off">LP introduction programme — mandate-matched, 3–5 per quarter</div>
+        <div class="seg-off">Capital readiness assessment — 12-point written evaluation</div>
+        <div class="seg-off">Fund profile structured for LP diligence, MCA-corroborated</div>
+        <div class="seg-off">LP sentiment intelligence — what allocators in your category prioritise</div>
+        <div class="seg-off">Annual LP meeting preparation from Tier 2</div>
+      </div>
+      <div class="seg-plbl">Fund-level · 3 tiers · Qualification by AIF registration and fund stage</div>
+    </div>
+
+    <div class="seg fade d2">
+      <div class="seg-bar" style="background:#b8952a"></div>
+      <div class="seg-who" style="color:#c9a83c">LPs & Allocators</div>
+      <div class="seg-title">Family offices and institutional allocators building exposure to Indian private markets.</div>
+      <p class="seg-pain">The Indian emerging manager universe is large, largely opaque, and served almost exclusively through intermediaries with placement incentives. TCR provides a structured, conflict-free pipeline — with independent diligence support built in.</p>
+      <div class="seg-offs">
+        <div class="seg-off">Mandate-matched GP introductions — 3–5 per quarter</div>
+        <div class="seg-off">AIF portfolio health check — annual, independent, written</div>
+        <div class="seg-off">TCR Ecosystem LP roundtable — closed, peer-only, no GPs present</div>
+        <div class="seg-off">Independent GP reference checks and PPM review</div>
+        <div class="seg-off">Annual LP strategy session at Institutional tier</div>
+      </div>
+      <div class="seg-plbl">Family / institution · 3 tiers · Qualification by allocation mandate</div>
+    </div>
+
+    <div class="seg fade d3">
+      <div class="seg-bar" style="background:#0f6e56"></div>
+      <div class="seg-who" style="color:#1D9E75">Founders (Series A+)</div>
+      <div class="seg-title">Capital-ready founders in Healthcare, Fintech, and Deeptech.</div>
+      <p class="seg-pain">A Series A founder with institutional capital on the cap table is credible to the right GPs. The problem is rarely the company. It is the absence of a structured, contextualised introduction to the right room.</p>
+      <div class="seg-offs">
+        <div class="seg-off">Thesis audit — investor positioning before the first meeting</div>
+        <div class="seg-off">GP and LP matching — warm, contextualised, followed through</div>
+        <div class="seg-off">TCR Ecosystem Room — sector peer network, not a pitch environment</div>
+        <div class="seg-off">M&A pathway advisory for Series B and beyond</div>
+      </div>
+      <div class="seg-plbl">Healthcare · Fintech · Deeptech only · Qualification by stage, revenue, and sector</div>
+    </div>
+
+    <div class="seg fade d4">
+      <div class="seg-bar" style="background:#1a3a6b"></div>
+      <div class="seg-who" style="color:#378ADD">Investment Banks</div>
+      <div class="seg-title">Mid-market IBs and advisory firms extending investor reach without compromising brand or confidentiality.</div>
+      <p class="seg-pain">An IB's investor pool is finite. Every mandate that exceeds it either closes below its potential or does not close. TCR operates as silent infrastructure — matching against a verified fund network while every introduction goes under the IB's own name.</p>
+      <div class="seg-offs">
+        <div class="seg-off">Blind matching against verified fund network — introductions under your name</div>
+        <div class="seg-off">Access-tracked data room — engagement data by investor, by document</div>
+        <div class="seg-off">Deployment intelligence — active and paused fund signals by sector</div>
+        <div class="seg-off">Unlimited mandates with priority surfacing at Pro tier</div>
+      </div>
+      <div class="seg-plbl">SEBI-registered advisory firms · Qualification by active deal mandate</div>
+    </div>
+  </div>
+
+  <!-- Row 2 — Corporates + Women Professionals -->
+  <div class="segs-row2">
+    <div class="seg fade">
+      <div class="seg-bar" style="background:#6b3a8a"></div>
+      <div class="seg-who" style="color:#a87fd4">Corporates</div>
+      <div class="seg-title">Corporate treasury, strategy, and BD teams with a mandate to participate in India's private capital ecosystem.</div>
+      <p class="seg-pain">Corporates allocate to AIFs, co-invest alongside GPs, pursue M&A in private markets, and need transaction intelligence that is not served by either the public market data providers or the GP community itself. TCR gives them a structured seat at the table.</p>
+      <div class="seg-offs">
+        <div class="seg-off">AIF allocation intelligence — which funds are structurally relevant to your treasury mandate</div>
+        <div class="seg-off">GP co-investment introductions — deal-by-deal, mandate-matched, no general solicitation</div>
+        <div class="seg-off">M&A transaction support — strategic acquirer mapping, deal facilitation, sector intelligence</div>
+        <div class="seg-off">Sector-level deployment data for corporate venture and strategic investment teams</div>
+        <div class="seg-off">TCR Ecosystem access for senior strategy and investment professionals</div>
+      </div>
+      <div class="seg-plbl">Corporate treasury, strategy, and investment teams · Bespoke engagement</div>
+    </div>
+
+    <div class="seg fade d1">
+      <div class="seg-bar" style="background:#b8952a"></div>
+      <div class="seg-who" style="color:#d4aa3f">Women Professionals in Private Capital</div>
+      <div class="seg-title">A named, structural access point — not an afterthought.</div>
+      <p class="seg-pain">Women in PE/VC are systematically excluded from the informal networks that drive deal access, carry conversations, and career mobility. The problem is not representation in headline numbers. It is that the rooms where the real intelligence circulates were not built with women's participation as a design assumption. TCR is.</p>
+      <div class="seg-offs">
+        <div class="seg-off">Peer rooms structured by seniority and role — gender is not a separate track, it is the baseline design</div>
+        <div class="seg-off">Compensation and carry benchmarking disaggregated and available without qualification</div>
+        <div class="seg-off">TCR Ecosystem roundtable access on equal terms — seniority-matched, not gender-streamed</div>
+        <div class="seg-off">Network introductions and deal access on the same basis as every other professional on the platform</div>
+        <div class="seg-off">No "women in finance" programming. Equal access to the same infrastructure as everyone else.</div>
+      </div>
+      <div class="seg-plbl">Same qualification criteria and access structure as all investment professionals</div>
+    </div>
+  </div>
+</section>
+
+<!-- ONLY TCR — what no competitor can claim simultaneously -->
+<section class="only-section" id="only">
+  <div class="sl">The Case for TCR</div>
+  <h2 class="sh">Four things no other<br>platform in India does<br><em>at the same time.</em></h2>
+
+  <div class="only-grid">
+    <div class="only-cell fade">
+      <span class="only-num">01</span>
+      <div class="only-title">Capital moves on this platform. Not just conversations.</div>
+      <p class="only-body">TCR is not a directory that ends at the introduction. It is the platform where India's private capital participants — GPs, LPs, founders, corporates, and advisors — operate with verified data, structured access, and the intelligence to act with conviction. The transactions that follow are a consequence of the infrastructure, not a separate service.</p>
+      <span class="only-tag">Startup ↔ Fund · Fund ↔ LP · Corporate ↔ Market</span>
+    </div>
+    <div class="only-cell fade d1">
+      <span class="only-num">02</span>
+      <div class="only-title">We serve every layer of the ecosystem simultaneously.</div>
+      <p class="only-body">GPs, LPs, investment professionals, founders, investment banks, and corporates — in one platform, with structured access between them. PitchBook covers data. LinkedIn covers networking. Preqin covers benchmarking. None of them move capital or govern the community. TCR does all of it, from one position in the market.</p>
+      <span class="only-tag">Seven participant types · One infrastructure</span>
+    </div>
+    <div class="only-cell fade d2">
+      <span class="only-num">03</span>
+      <div class="only-title">We built the peer intelligence layer with structural protections.</div>
+      <p class="only-body">The TCR Ecosystem is not a WhatsApp group or an alumni network. It is a governed community with enforced seniority tiers, employer-blind architecture, and rules that do not bend for senior participants. The intelligence it produces is a direct function of those rules. That design cannot be replicated by adding a "community" feature to an existing platform.</p>
+      <span class="only-tag">Seniority-enforced · Employer-blind · Governed</span>
+    </div>
+    <div class="only-cell fade d3">
+      <span class="only-num">04</span>
+      <div class="only-title">Women professionals are participants, not a programme.</div>
+      <p class="only-body">TCR does not have a women's initiative. It has an architecture that treats women's participation as a design requirement, not a diversity metric. Equal access to peer rooms, to carry benchmarking, to deal networks, and to capital introductions — on the same terms as every other participant. No separate track. No separate room. The same infrastructure.</p>
+      <span class="only-tag">Design assumption · Not a feature</span>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSACTIONS STRIP -->
+<div class="tx-strip" id="transactions">
+  <div class="tx-layout">
+    <div class="fade">
+      <div class="sl">Capital Connectivity</div>
+      <h2 class="sh">The platform where<br>India's private capital<br><em>moves with structure.</em></h2>
+      <p class="sb" style="margin-top:18px">TCR does not broker transactions. It is the platform through which the right participants find each other, conduct diligence on verified data, and move capital with institutional discipline. The flows happen because the right people are in the same place.</p>
+    </div>
+    <div class="tx-flows fade d2">
+      <div class="tx-flow">
+        <span class="tx-flow-from">Startup</span>
+        <span class="tx-flow-arrow">————→</span>
+        <span class="tx-flow-to">Fund (GP)</span>
+        <span class="tx-flow-type">Equity investment · Series A–B</span>
+      </div>
+      <div class="tx-flow">
+        <span class="tx-flow-from">Fund (GP)</span>
+        <span class="tx-flow-arrow">————→</span>
+        <span class="tx-flow-to">LP / Allocator</span>
+        <span class="tx-flow-type">AIF commitment · Fund close</span>
+      </div>
+      <div class="tx-flow">
+        <span class="tx-flow-from">Corporate</span>
+        <span class="tx-flow-arrow">————→</span>
+        <span class="tx-flow-to">Startup / Fund</span>
+        <span class="tx-flow-type">M&A · Co-investment · AIF allocation</span>
+      </div>
+      <div class="tx-flow">
+        <span class="tx-flow-from">IB / Advisor</span>
+        <span class="tx-flow-arrow">————→</span>
+        <span class="tx-flow-to">Investor Network</span>
+        <span class="tx-flow-type">Mandate matching · Deal close</span>
+      </div>
+      <div style="padding:14px 0;border-top:.5px solid var(--i12);margin-top:4px">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--i55)">What the platform provides</div>
+        <div style="font-size:13px;font-weight:300;color:var(--i80);line-height:1.7;margin-top:6px">Verified data on every participant. Structured access between segments. Intelligence that supports conviction. The capital moves because the infrastructure exists to support it — not because TCR sits in the middle of each transaction.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<section id="wc">
+  <div class="wc-layout">
+    <div class="fade">
+      <div class="sl">The TCR Ecosystem</div>
+      <h2 class="sh">Peer intelligence that<br>requires structural<br><em>protection to exist.</em></h2>
+      <p class="sb">The TCR Ecosystem is a seniority-tiered, employer-blind community for investment professionals, GPs, and LPs. The candour that makes it useful is a direct consequence of the rules that govern it.</p>
+      <div style="margin-top:44px">
+        <div class="wc-rule">Seniority tiers are strictly enforced. No participant is placed in a room with anyone more than one level senior. A single exception — even unrepeated — permanently changes the room's dynamic. The rule holds without negotiation.</div>
+        <div class="wc-rule">No employer representation in peer rooms. The architecture ensures that professionals at every level can discuss compensation, attribution, and fund trajectory without consequence. That protection is the product.</div>
+        <div class="wc-rule">Founders are the asset layer, not the commercial layer. GPs engage for deal flow access. LPs engage for portfolio intelligence. The incentive structure within the community is transparent and does not change.</div>
+        <div class="wc-rule">Quarterly in-person LP/GP roundtables. The same intelligence that circulates in the community — with the relevant decision-makers present in the same room. Not a panel. A structured peer conversation.</div>
+      </div>
+    </div>
+    <div class="wc-right fade d2">
+      <div class="wc-card" style="border-left:2px solid #534AB7">
+        <div class="wc-clbl" style="color:#534AB7">Professionals — Associate / VP / Partner</div>
+        <div class="wc-ctitle">Compensation, carry, and career intelligence</div>
+        <p class="wc-cbody">Three separate rooms by seniority level — Associate, VP/Principal, Partner/MD. Compensation benchmarking, IC access dynamics, deal attribution, carry negotiation. Structured so that each cohort can speak to its own circumstances without qualification.</p>
+      </div>
+      <div class="wc-card" style="border-left:2px solid #1a6b3c">
+        <div class="wc-clbl" style="color:#1a6b3c">GPs — Peer benchmarking and LP intelligence</div>
+        <div class="wc-ctitle">Fundraising dynamics shared between peers</div>
+        <p class="wc-cbody">LP appetite signals, anonymised fundraising benchmarks, deal flow exchange, and competitive landscape intelligence shared between GPs at comparable stages. Speaker placement at TCR Ecosystem events from Tier 2.</p>
+      </div>
+      <div class="wc-card" style="border-left:2px solid #b8952a">
+        <div class="wc-clbl" style="color:#b8952a">LPs — Closed, peer-only, no GP presence</div>
+        <div class="wc-ctitle">Allocation strategy without external agenda</div>
+        <p class="wc-cbody">Family offices and institutional allocators benchmarking GP quality, fund terms, and portfolio strategy against peers — in a closed environment with no GP participants, no placement agenda, and no referral incentive in the room.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTELLIGENCE -->
+<section id="intel" class="intel-bg">
+  <div class="sl">Intelligence Layer</div>
+  <h2 class="sh">Primary source data,<br>structured for<br><em>institutional use.</em></h2>
+  <p class="sb">TCR's intelligence standard is built around a simple principle: every data point is either verified from a named primary source, or explicitly framed as an observed pattern. The distinction is always visible.</p>
+
+  <div class="intel-layout">
+    <div>
+      <div class="dc">
+        <div class="dc-hdr"><span class="dc-ttl">Fund Registry — Illustrative Standard</span><span style="font-family:var(--mono);font-size:9px;color:var(--i55)">How each fund will appear</span></div>
+        <div class="fr">
+          <div><div class="fr-nm">Inflection Point Ventures</div><div class="fr-mt">SEBI Cat I AIF · Seed · Multi-sector</div></div>
+          <div style="text-align:right"><div class="fr-cp">₹285 Cr</div><div class="fr-tg">○ MCA Standard</div></div>
+        </div>
+        <div class="fr">
+          <div><div class="fr-nm">Artha Venture Fund</div><div class="fr-mt">SEBI Cat II AIF · Pre-Series A · Fintech</div></div>
+          <div style="text-align:right"><div class="fr-cp">₹180 Cr</div><div class="fr-tg">○ MCA Standard</div></div>
+        </div>
+        <div class="fr">
+          <div><div class="fr-nm">Bharat Innovation Fund</div><div class="fr-mt">SEBI Cat II AIF · Series A · Deep Tech</div></div>
+          <div style="text-align:right"><div class="fr-cp">₹420 Cr</div><div class="fr-tg">○ MCA Standard</div></div>
+        </div>
+        <div class="fr">
+          <div><div class="fr-nm">Fireside Ventures Fund III</div><div class="fr-mt">SEBI Cat II AIF · Series A–B · Consumer</div></div>
+          <div style="text-align:right"><div class="fr-cp">₹750 Cr</div><div class="fr-tg">○ MCA Standard</div></div>
+        </div>
+      </div>
+      <div class="sc">
+        <div class="dc-hdr"><span class="dc-ttl">Sector Momentum · 90-day</span><span style="font-family:var(--mono);font-size:9px;color:var(--i55)">Updated weekly</span></div>
+        <div class="srows">
+          <div class="srow"><span class="slbl">Fintech</span><div class="strk"><div class="sfill" style="width:88%;background:var(--green)"></div></div><span class="sval" style="color:var(--green)">▲88</span></div>
+          <div class="srow"><span class="slbl">Deep Tech</span><div class="strk"><div class="sfill" style="width:76%;background:var(--green)"></div></div><span class="sval" style="color:var(--green)">▲76</span></div>
+          <div class="srow"><span class="slbl">Healthtech</span><div class="strk"><div class="sfill" style="width:64%;background:var(--green)"></div></div><span class="sval" style="color:var(--green)">▲64</span></div>
+          <div class="srow"><span class="slbl">SaaS</span><div class="strk"><div class="sfill" style="width:51%;background:var(--gold)"></div></div><span class="sval" style="color:var(--gold)">●51</span></div>
+          <div class="srow"><span class="slbl">Consumer</span><div class="strk"><div class="sfill" style="width:42%;background:var(--gold)"></div></div><span class="sval" style="color:var(--gold)">●42</span></div>
+          <div class="srow"><span class="slbl">EdTech</span><div class="strk"><div class="sfill" style="width:38%;background:#b02020"></div></div><span class="sval" style="color:#b02020">▼38</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade d2">
+      <div style="margin-bottom:36px">
+        <div class="sl" style="margin-bottom:14px">Three standards we hold to</div>
+        <div style="border-bottom:.5px solid var(--i12);padding:20px 0">
+          <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:6px">Source attribution is always explicit</div>
+          <div style="font-size:13px;font-weight:300;color:var(--i80);line-height:1.7">Every data point carries its source. MCA-derived data and GP-reported data are structurally separated and visually distinguished at all times. The reader always knows what they are reading and where it originates.</div>
+        </div>
+        <div style="border-bottom:.5px solid var(--i12);padding:20px 0">
+          <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:6px">Performance data is labelled, not suppressed</div>
+          <div style="font-size:13px;font-weight:300;color:var(--i80);line-height:1.7">IRR, TVPI, and exit data are available as optional GP-enriched fields. They are carried with an explicit unverified label that persists throughout the platform. The distinction is non-negotiable.</div>
+        </div>
+        <div style="padding:20px 0">
+          <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:6px">Commercial incentives do not influence data presentation</div>
+          <div style="font-size:13px;font-weight:300;color:var(--i80);line-height:1.7">No fund can pay to rank higher. No LP can pay to be surfaced first. The intelligence layer is commercially independent of the participants it describes. That independence is structural, not a policy position.</div>
+        </div>
+      </div>
+      <div style="background:var(--white);border:.5px solid var(--i12);padding:28px">
+        <div class="sl" style="margin-bottom:14px">For Investment Banks</div>
+        <div style="font-family:var(--serif);font-size:17px;font-weight:500;color:var(--ink);margin-bottom:10px">Silent infrastructure. Every introduction under your firm's name.</div>
+        <p style="font-size:13px;font-weight:300;color:var(--i80);line-height:1.72;margin-bottom:18px">IBs register their investor pool — hashed, private, and invisible to every other firm on the platform. TCR runs the matching against a network of verified funds. The IB sends the introduction. TCR is never disclosed.</p>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--i06)"><span style="font-size:12.5px;color:var(--i80)">Access model</span><span style="font-family:var(--mono);font-size:12.5px;color:var(--ink)">Discussed on engagement</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--i06)"><span style="font-size:12.5px;color:var(--i80)">Investor pool confidentiality</span><span style="font-family:var(--mono);font-size:12.5px;color:var(--ink)">Hashed · Never shared</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0"><span style="font-size:12.5px;color:var(--i80)">Funds in matching network</span><span style="font-family:var(--mono);font-size:12.5px;color:var(--green)">Verified network · In build</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET PULSE -->
+<section id="pulse">
+  <div class="sl">Market Pulse</div>
+  <h2 class="sh">Six sectors.<br>Continuous signal.</h2>
+  <p class="sb">Deployment momentum intelligence across India's six principal alternative investment verticals — each linked to the verified funds operating within it. Updated on a rolling basis, not an editorial cycle.</p>
+  <div class="pulse-grid">
+    <div class="pc fade"><div class="pc-sec">Fintech</div><div class="pc-sig"><div class="pc-dot" style="background:var(--green)"></div><span class="pc-st">High Momentum</span></div><div class="pc-num">₹4,200 Cr</div><div class="pc-nl">Deployed · 90 days</div><div class="pc-bar"><div class="pc-bf" style="width:88%;background:var(--green)"></div></div></div>
+    <div class="pc fade d1"><div class="pc-sec">Deep Tech</div><div class="pc-sig"><div class="pc-dot" style="background:var(--green)"></div><span class="pc-st">Rising</span></div><div class="pc-num">₹2,800 Cr</div><div class="pc-nl">Deployed · 90 days</div><div class="pc-bar"><div class="pc-bf" style="width:76%;background:var(--green)"></div></div></div>
+    <div class="pc fade d2"><div class="pc-sec">Healthtech</div><div class="pc-sig"><div class="pc-dot" style="background:var(--green)"></div><span class="pc-st">Positive</span></div><div class="pc-num">₹1,950 Cr</div><div class="pc-nl">Deployed · 90 days</div><div class="pc-bar"><div class="pc-bf" style="width:64%;background:var(--green)"></div></div></div>
+    <div class="pc fade"><div class="pc-sec">SaaS / B2B</div><div class="pc-sig"><div class="pc-dot" style="background:var(--gold)"></div><span class="pc-st">Neutral</span></div><div class="pc-num">₹1,600 Cr</div><div class="pc-nl">Deployed · 90 days</div><div class="pc-bar"><div class="pc-bf" style="width:51%;background:var(--gold)"></div></div></div>
+    <div class="pc fade d1"><div class="pc-sec">Consumer</div><div class="pc-sig"><div class="pc-dot" style="background:var(--gold)"></div><span class="pc-st">Cautious</span></div><div class="pc-num">₹1,100 Cr</div><div class="pc-nl">Deployed · 90 days</div><div class="pc-bar"><div class="pc-bf" style="width:42%;background:var(--gold)"></div></div></div>
+    <div class="pc fade d2"><div class="pc-sec">EdTech</div><div class="pc-sig"><div class="pc-dot" style="background:#b02020"></div><span class="pc-st">Recovering</span></div><div class="pc-num">₹480 Cr</div><div class="pc-nl">Deployed · 90 days</div><div class="pc-bar"><div class="pc-bf" style="width:38%;background:#b02020"></div></div></div>
+  </div>
+</section>
+
+<!-- VERIFICATION -->
+<section id="verify" style="background:var(--parchment)">
+  <div class="verify-layout">
+    <div>
+      <div class="sl">Verification Standard</div>
+      <h2 class="sh">Every fund held to<br>the same primary<br><em>source standard.</em></h2>
+      <p class="sb">The verification layer is built around a simple architecture: what is derivable from public filings is derived from public filings. What the GP adds is accepted, labelled, and structurally separated. The two never appear as one.</p>
+      <div class="steps">
+        <div class="step fade"><span class="sn">01</span><div><div class="st">SEBI AIF registration — confirmed against the registry</div><p class="sbody">Fund CIN and SEBI registration number are cross-referenced against the SEBI AIF registry. Only Category I and II AIFs enter the primary data layer. Registration status is confirmed, not accepted on declaration.</p></div></div>
+        <div class="step fade d1"><span class="sn">02</span><div><div class="st">MCA filing — corpus, personnel, and portfolio from public record</div><p class="sbody">Ministry of Corporate Affairs filings provide corpus size, registered office, and key managerial personnel. Portfolio company data is derived from MCA shareholding records and cross-referenced to the fund entity's CIN.</p></div></div>
+        <div class="step fade d2"><span class="sn">03</span><div><div class="st">GP enrichment — accepted, attributed, and separated</div><p class="sbody">GPs may add investment thesis, sector focus, stage, and performance data. These fields are structurally separated from MCA-derived data and carry an unverified attribution label at all times. The two layers do not merge.</p></div></div>
+        <div class="step fade d3"><span class="sn">04</span><div><div class="st">Portfolio company layer — linked to the fund's CIN</div><p class="sbody">Portfolio companies are surfaced from MCA shareholding data and linked to the relevant fund entity. Sector and stage metadata is GP-controlled and labelled accordingly. Ownership data is from public record.</p></div></div>
+      </div>
+    </div>
+    <div class="fade d2">
+      <div class="mca">
+        <div class="mca-hd"><div><div class="mca-t">Illustrative Fund Record</div><div class="mca-cin">Structure of every fund profile on TCR</div></div><div class="mca-stamp">MCA Standard</div></div>
+        <div class="mf"><span class="mk">SEBI Category</span><span class="mv">Category I AIF</span></div>
+        <div class="mf"><span class="mk">Registration No.</span><span class="mv">IN/AIF1/21-22/0982</span></div>
+        <div class="mf"><span class="mk">Corpus (MCA Filed)</span><span class="mv">₹285,00,00,000</span></div>
+        <div class="mf"><span class="mk">Registered Office</span><span class="mv">New Delhi, DL</span></div>
+        <div class="mf"><span class="mk">Filing Date</span><span class="mv">14 March 2024</span></div>
+        <div class="mf"><span class="mk">Status</span><span class="mv g">● Active</span></div>
+        <div class="mf"><span class="mk">Portfolio Cos. (MCA)</span><span class="mv">24 entities tracked</span></div>
+        <div class="mf" style="background:rgba(26,107,60,0.05)"><span class="mk" style="color:var(--green)">Verification Source</span><span class="mv g">Ministry of Corporate Affairs</span></div>
+      </div>
+      <div style="margin-top:14px;background:var(--white);border:.5px solid var(--i12);padding:22px 24px">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">GP-Enriched — Unverified</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between"><span style="font-size:12.5px;color:var(--i80)">Primary Sectors</span><span style="font-family:var(--mono);font-size:12px;color:var(--i55)">Fintech, SaaS, Consumer</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="font-size:12.5px;color:var(--i80)">Investment Stage</span><span style="font-family:var(--mono);font-size:12px;color:var(--i55)">Seed → Pre-Series A</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="font-size:12.5px;color:var(--i80)">Ticket Size</span><span style="font-family:var(--mono);font-size:12px;color:var(--i55)">₹2 – 8 Cr</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="font-size:12.5px;color:var(--i80)">IRR (GP Reported)</span><span style="font-family:var(--mono);font-size:12px;color:var(--gold)">Unverified ·  Label persists</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE — rewritten as testimony, not analysis -->
+<div class="quote-wrap">
+  <div class="quote-inner">
+    <span class="qm">"</span>
+    <p class="qt">India's private capital market is not short of capital or ambition. It is short of structured, verifiable, conflict-free information. TCR is built on the belief that the infrastructure to support that has been missing long enough.</p>
+    <span class="qa">— The Capital Room</span>
+  </div>
+</div>
+
+<!-- CTA -->
+<section id="access" class="cta-section">
+  <div class="cta-layout">
+    <div class="cta-left fade">
+      <div class="sl">Founding Access</div>
+      <h2 class="sh">The platform is in build.<br>The work has<br><em>already begun.</em></h2>
+      <p class="sb">TCR is currently operating as a structured service — working directly with GPs, LPs, and investment professionals while the platform is developed. Founding access participants engage now and transition to the platform at launch.</p>
+      <div style="margin-top:36px;padding:24px;border:.5px solid rgba(255,255,255,.1)">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:12px">What founding access involves</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:13px;color:rgba(255,255,255,.55);display:flex;gap:10px"><span style="color:var(--gold);flex-shrink:0">—</span>Service engagement begins immediately, prior to platform launch</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.55);display:flex;gap:10px"><span style="color:var(--gold);flex-shrink:0">—</span>Priority placement in the first cohort of structured fund profiles</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.55);display:flex;gap:10px"><span style="color:var(--gold);flex-shrink:0">—</span>Founding participant pricing held through Year 1</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.55);display:flex;gap:10px"><span style="color:var(--gold);flex-shrink:0">—</span>Direct onboarding — no intake form, no sales process</div>
+        </div>
+      </div>
+    </div>
+    <div class="fade d2">
+      <div class="cta-boxes">
+        <div class="cta-box">
+          <div class="cbl">Fund Managers (GPs)</div>
+          <div class="cbt">A structured LP-facing presence, built and managed for your fund.</div>
+          <p class="cbb">Capital readiness assessment, LP introduction programme, and a fund profile structured for institutional diligence. Onboarding begins with a single conversation — not a data room submission.</p>
+          <a href="mailto:hello@thecapitalroom.in" class="btn-p-light">Begin onboarding <svg viewBox="0 0 24 24" stroke-width="1.5" style="width:13px;height:13px;stroke:currentColor;fill:none"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+        <div class="cta-box">
+          <div class="cbl">LPs, Family Offices, Professionals & Women in Private Capital</div>
+          <div class="cbt">Structured access to India's emerging GP universe, on equal terms.</div>
+          <p class="cbb">Mandate-matched capital introductions, independent diligence support, and a peer intelligence community with enforced structural protections. Qualification by role and allocation intent. The same access standard applies to every professional on the platform.</p>
+          <a href="mailto:hello@thecapitalroom.in" class="btn-g-light">Request access →</a>
+        </div>
+        <div class="cta-box">
+          <div class="cbl">Corporates</div>
+          <div class="cbt">A structured seat at the private capital table — for AIF allocation, co-investment, and M&A.</div>
+          <p class="cbb">Corporate treasury and strategy teams with a mandate to participate in India's private markets get access to structured GP introductions, sector intelligence, and transaction facilitation — without a broker in the middle.</p>
+          <a href="mailto:hello@thecapitalroom.in" class="btn-g-light">Corporate access enquiry →</a>
+        </div>
+        <div class="cta-box">
+          <div class="cbl">Investment Banks</div>
+          <div class="cbt">A larger investor network, operating under your name.</div>
+          <p class="cbb">Blind matching against a verified fund network. Access-tracked data room infrastructure. Every introduction carries your firm's name. TCR is never disclosed to the investor. Engagement terms are discussed directly.</p>
+          <a href="mailto:hello@thecapitalroom.in" class="btn-g-light">IB access enquiry →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <span class="ft-wm">T<span>C</span>R</span>
+      <p class="ft-tag">The Capital Room is India's private capital platform — providing verified intelligence, structured access, and a governed peer community for fund managers, institutional allocators, investment professionals, founders, corporates, investment banks, and the women professionals that every other platform treats as an afterthought. Currently operating as a service. Platform launching Q3 2025.</p>
+      <p class="ft-fine">Fund data will be cross-referenced against MCA filings and SEBI AIF registrations at platform launch.<br>GP-enriched fields will carry explicit unverified labelling. TCR does not place capital.</p>
+    </div>
+    <div class="ft-links">
+      <div class="ft-col">
+        <div class="ft-ctitle">Platform</div>
+        <a href="#">Fund Registry</a>
+        <a href="#">Market Pulse</a>
+        <a href="#">GP Profiles</a>
+        <a href="#">Portfolio Layer</a>
+        <a href="#">Captable Registry</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-ctitle">Participants</div>
+        <a href="#">Fund Managers (GPs)</a>
+        <a href="#">LPs & Allocators</a>
+        <a href="#">Investment Professionals</a>
+        <a href="#">Women in Private Capital</a>
+        <a href="#">Founders (Series A+)</a>
+        <a href="#">Corporates</a>
+        <a href="#">Investment Banks</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-ctitle">Company</div>
+        <a href="#">About TCR</a>
+        <a href="#">TCR Ecosystem</a>
+        <a href="#">Methodology</a>
+        <a href="#">Data Sources</a>
+        <a href="#">hello@thecapitalroom.in</a>
+      </div>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <div class="ft-copy">© 2025 The Capital Room. All rights reserved.</div>
+    <div class="ft-reg"><span>MCA + SEBI Standard · Platform in Build</span><span>New Delhi, India</span></div>
+  </div>
+</footer>
+
+<script>
+  // Scroll fade-in
+  const obs = new IntersectionObserver(e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('in'); }), { threshold: 0.1 });
+  document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+
+  // Nav hide/show
+  let lastY = 0;
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    nav.style.transform = (y > lastY && y > 100) ? 'translateY(-100%)' : 'translateY(0)';
+    lastY = y;
+  }, { passive: true });
+
+  // Counter animation
+  function runCount(el, target) {
+    const dur = 1800, start = performance.now();
+    const tick = now => {
+      const p = Math.min((now - start) / dur, 1);
+      const e2 = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * e2).toLocaleString('en-IN');
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  // Hero counters
+  const cObs = new IntersectionObserver(e => {
+    e.forEach(x => {
+      if (x.isIntersecting) {
+        document.querySelectorAll('.counter').forEach(c => runCount(c, +c.dataset.t));
+        cObs.disconnect();
+      }
+    });
+  }, { threshold: 0.4 });
+  const ha = document.querySelector('.hero-aside');
+  if (ha) cObs.observe(ha);
+
+  // Proof strip counters
+  const pObs = new IntersectionObserver(e => {
+    e.forEach(x => {
+      if (x.isIntersecting) {
+        document.querySelectorAll('.counter2').forEach(c => runCount(c, +c.dataset.t));
+        pObs.disconnect();
+      }
+    });
+  }, { threshold: 0.4 });
+  const ps = document.querySelector('.proof-strip');
+  if (ps) pObs.observe(ps);
+</script>
+</body>
+</html>
