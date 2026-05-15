@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCR — For Investment Banks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --gold:#b8952a;--gold-lt:#c9a83c;--gold-border:rgba(184,149,42,0.2);--gold-pale:rgba(184,149,42,0.06);
+    --white:#ffffff;--off:#fafaf8;--parchment:#f5f2ed;
+    --ink:#0d0d0b;--i80:rgba(13,13,11,0.80);--i55:rgba(13,13,11,0.55);
+    --i30:rgba(13,13,11,0.30);--i12:rgba(13,13,11,0.12);--i06:rgba(13,13,11,0.06);
+    --green:#1a6b3c;--green-bg:rgba(26,107,60,0.07);--green-border:rgba(26,107,60,0.18);
+    --blue:#1a3a6b;--blue-bg:rgba(26,58,107,0.07);
+    --amber:#92600a;--amber-bg:#fef8ec;
+    --red:#8b1f1f;--red-bg:#fdf0f0;
+    --border:#e4e0d8;
+    --serif:'Playfair Display',Georgia,serif;
+    --sans:'DM Sans',system-ui,sans-serif;
+    --mono:'DM Mono','Courier New',monospace;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--white);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,0.96);backdrop-filter:blur(14px);border-bottom:0.5px solid var(--i12);transition:transform .3s ease}
+  .nav-logo{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+  .nav-wm{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);letter-spacing:-.3px}
+  .nav-wm span{color:var(--gold)}
+  .nav-tag{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--i55);padding-bottom:2px}
+  .nav-links{display:flex;align-items:center;gap:34px;list-style:none}
+  .nav-links a{font-size:13px;color:var(--i80);text-decoration:none;transition:color .18s}
+  .nav-links a:hover{color:var(--gold)}
+  .nav-cta{background:var(--ink)!important;color:var(--white)!important;padding:9px 22px;border-radius:2px;font-size:11.5px!important;letter-spacing:.09em;text-transform:uppercase;transition:background .2s!important}
+  .nav-cta:hover{background:var(--gold)!important}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 60px 96px;position:relative;overflow:hidden}
+  .hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--i06) .5px,transparent .5px),linear-gradient(90deg,var(--i06) .5px,transparent .5px);background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 70% at 65% 50%,black,transparent)}
+  .hero-line{position:absolute;top:28%;right:-5%;width:52%;height:.5px;background:linear-gradient(90deg,transparent,var(--gold-border),transparent);transform:rotate(-6deg)}
+  .hero-signal{position:absolute;top:84px;left:60px;right:60px;display:flex;align-items:center;gap:20px;padding:12px 20px;border:.5px solid var(--i06);background:var(--off)}
+  .hs-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
+  .hs-text{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--i55)}
+  .hs-text strong{color:var(--ink);font-weight:500}
+  .hs-div{width:.5px;height:14px;background:var(--i12)}
+  .hero-ey{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px}
+  .hero-ey::before{content:'';display:block;width:28px;height:.5px;background:var(--gold)}
+  .hero-h1{font-family:var(--serif);font-size:clamp(44px,5.5vw,82px);font-weight:400;line-height:1.06;letter-spacing:-1.5px;color:var(--ink);max-width:820px;margin-bottom:32px}
+  .hero-h1 em{font-style:italic;color:var(--gold)}
+  .hero-sub{font-size:17px;font-weight:300;line-height:1.75;color:var(--i80);max-width:560px;margin-bottom:52px}
+  .hero-acts{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+  .btn-p{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--white);font-size:11.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:15px 34px;border-radius:2px;text-decoration:none;transition:background .22s,transform .15s}
+  .btn-p:hover{background:var(--gold);transform:translateY(-1px)}
+  .btn-p svg{width:13px;height:13px;stroke:currentColor;fill:none;transition:transform .2s}
+  .btn-p:hover svg{transform:translateX(3px)}
+  .btn-g{font-size:13px;color:var(--i80);text-decoration:none;display:inline-flex;align-items:center;gap:8px;border-bottom:1px solid var(--i30);padding-bottom:2px;transition:color .18s,border-color .18s}
+  .btn-g:hover{color:var(--gold);border-color:var(--gold)}
+  .hero-aside{position:absolute;right:60px;bottom:96px;display:flex;flex-direction:column;align-items:flex-end;gap:22px}
+  .hs-s{text-align:right}
+  .hs-num{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--ink);display:block}
+  .hs-lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--i55)}
+  .hs-rule{width:.5px;height:34px;background:var(--i30);margin-left:auto}
+
+  /* SECTION BASICS */
+  section{padding:112px 60px}
+  .sl{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:14px;margin-bottom:20px}
+  .sl::before{content:'';display:block;width:28px;height:.5px;background:var(--gold)}
+  .sh{font-family:var(--serif);font-size:clamp(30px,3.8vw,52px);font-weight:400;line-height:1.1;letter-spacing:-.8px;color:var(--ink)}
+  .sh em{font-style:italic;color:var(--gold)}
+  .sb{font-size:15.5px;font-weight:300;line-height:1.75;color:var(--i80);max-width:500px;margin-top:18px}
+
+  /* TICKER */
+  .ticker{border-top:.5px solid var(--i12);border-bottom:.5px solid var(--i12);background:var(--parchment);padding:13px 0;overflow:hidden}
+  .ticker-track{display:flex;width:max-content;animation:tick 50s linear infinite}
+  .ticker-track:hover{animation-play-state:paused}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .ti{display:flex;align-items:center;gap:10px;padding:0 36px;border-right:.5px solid var(--i12);white-space:nowrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--i80)}
+  .td{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+
+  /* FADE */
+  .fade{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+  .fade.in{opacity:1;transform:translateY(0)}
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+  /* THE MATH SECTION — dark, pure arithmetic */
+  .math-section{background:var(--ink);padding:0}
+  .math-inner{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+  .math-cell{padding:64px 52px;border-right:.5px solid rgba(255,255,255,.07);display:flex;flex-direction:column;justify-content:center}
+  .math-cell:last-child{border-right:none}
+  .math-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px}
+  .math-num{font-family:var(--serif);font-size:clamp(48px,5vw,72px);font-weight:400;line-height:1;letter-spacing:-2px}
+  .math-num.white{color:var(--white)}
+  .math-num.gold{color:var(--gold)}
+  .math-num.green{color:#2a8a50}
+  .math-desc{font-size:14px;font-weight:300;line-height:1.65;color:rgba(255,255,255,.45);margin-top:14px;max-width:280px}
+  .math-desc strong{color:rgba(255,255,255,.8);font-weight:500}
+  .math-divider{width:40px;height:.5px;background:var(--gold);opacity:.4;margin:20px 0}
+  .math-note{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);line-height:1.6}
+
+  /* BLIND MECHANIC SECTION */
+  .blind-section{background:var(--parchment)}
+  .blind-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:64px}
+
+  /* Pool visual mockup */
+  .pool-visual{border:.5px solid var(--i12);border-radius:4px;overflow:hidden;background:var(--white)}
+  .pv-header{padding:14px 18px;border-bottom:.5px solid var(--i12);background:var(--white);display:flex;align-items:center;justify-content:space-between}
+  .pv-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--i55)}
+  .pv-live{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--green)}
+  .pv-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+  .pv-cols{display:grid;grid-template-columns:1fr auto 1fr;border-bottom:.5px solid var(--i12)}
+  .pv-col{padding:18px 16px}
+  .pv-col.center{background:var(--green-bg);border-left:.5px solid var(--green-border);border-right:.5px solid var(--green-border);display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:140px;padding:18px 20px}
+  .pv-col.right-col{background:var(--gold-pale)}
+  .pv-col-label{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+  .pv-col-label.own{color:var(--i55)}
+  .pv-col-label.tcr{color:var(--green)}
+  .pv-col-label.total{color:var(--gold)}
+  .pv-count{font-family:var(--serif);font-size:36px;font-weight:600;line-height:1;margin-bottom:6px}
+  .pv-count.own{color:var(--ink)}
+  .pv-count.tcr{color:var(--green)}
+  .pv-count.total{color:var(--gold)}
+  .pv-desc{font-size:11px;font-weight:300;color:var(--i55);line-height:1.5;margin-bottom:10px}
+  .inv-chip{display:flex;align-items:center;gap:8px;padding:6px 9px;background:var(--white);border:.5px solid var(--i12);border-radius:3px;margin-bottom:4px}
+  .inv-chip-av{width:20px;height:20px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:600;font-family:var(--mono);flex-shrink:0}
+  .inv-chip-av.own{background:var(--parchment);color:var(--i55)}
+  .inv-chip-av.tcr{background:var(--green-bg);color:var(--green)}
+  .inv-chip-name{font-size:10px;font-weight:500;color:var(--ink);flex:1}
+  .inv-chip-name.blurred{filter:blur(3px);user-select:none;color:var(--i55)}
+  .inv-chip-tag{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:3px}
+  .tag-new{background:var(--green-bg);color:var(--green)}
+  .tag-lock{color:var(--i30);font-size:10px}
+
+  .pv-total-box{background:var(--white);border:.5px solid var(--gold-border);border-radius:3px;padding:12px 14px;margin-top:4px}
+  .ptb-num{font-family:var(--serif);font-size:28px;font-weight:600;color:var(--gold);line-height:1;margin-bottom:3px}
+  .ptb-label{font-size:11px;font-weight:300;color:var(--i80)}
+  .ptb-fine{font-family:var(--mono);font-size:9px;color:var(--i55);margin-top:6px;line-height:1.5}
+
+  .brand-bar{background:var(--ink);padding:14px 18px;display:flex;align-items:center;gap:12px}
+  .bb-icon{font-size:14px;color:var(--gold);flex-shrink:0}
+  .bb-text{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.7);letter-spacing:.04em;line-height:1.5}
+  .bb-text strong{color:var(--white);font-weight:500}
+
+  /* FEATURE RULES */
+  .feature-rule{display:flex;gap:24px;padding:28px 0;border-bottom:.5px solid var(--i12)}
+  .feature-rule:first-child{border-top:.5px solid var(--i12)}
+  .fr-num{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--i30);flex-shrink:0;padding-top:3px;width:28px}
+  .fr-title{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:7px}
+  .fr-body{font-size:13.5px;font-weight:300;color:var(--i80);line-height:1.7}
+  .fr-tag{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);background:var(--green-bg);padding:3px 9px;border-radius:2px}
+  .fr-tag::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--green)}
+
+  /* DASHBOARD MOCKUP */
+  .mockup-wrap{position:sticky;top:90px}
+  .mockup{border:.5px solid var(--i12);border-radius:6px;overflow:hidden;background:var(--white)}
+  .mockup-bar{background:var(--parchment);padding:10px 14px;border-bottom:.5px solid var(--i12);display:flex;align-items:center;gap:8px}
+  .mb-dots{display:flex;gap:5px}
+  .mb-dot{width:8px;height:8px;border-radius:50%}
+  .mb-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--i55);margin-left:auto}
+
+  .db-shell{display:grid;grid-template-columns:148px 1fr;height:480px;font-size:11px}
+  .db-nav{border-right:.5px solid var(--border);display:flex;flex-direction:column;padding:10px 8px;background:var(--white)}
+  .db-logo{font-family:var(--serif);font-size:13px;font-weight:600;padding:4px 6px 10px;border-bottom:.5px solid var(--border);margin-bottom:8px;letter-spacing:-.2px;color:var(--ink)}
+  .db-logo span{color:var(--gold)}
+  .db-sec{font-size:8px;font-family:var(--mono);text-transform:uppercase;letter-spacing:1.4px;color:var(--i30);padding:8px 6px 3px}
+  .db-item{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:4px;cursor:pointer;font-size:10px;color:var(--i55);margin-bottom:1px;position:relative}
+  .db-item:hover{background:var(--off)}
+  .db-item.active{background:var(--parchment);color:var(--ink);font-weight:500}
+  .db-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:12px;background:var(--gold);border-radius:1px}
+  .db-badge{margin-left:auto;font-size:7.5px;font-family:var(--mono);padding:1px 4px;border-radius:5px}
+  .dbb-gold{background:rgba(184,149,42,.12);color:var(--gold)}
+  .dbb-green{background:var(--green-bg);color:var(--green)}
+  .dbb-amber{background:var(--amber-bg);color:var(--amber)}
+  .dbb-blue{background:var(--blue-bg);color:var(--blue)}
+
+  .db-main{display:flex;flex-direction:column;overflow:hidden;background:var(--parchment)}
+  .db-topbar{background:var(--white);padding:10px 14px;border-bottom:.5px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+  .db-ey{font-family:var(--mono);font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:2px}
+  .db-title{font-family:var(--serif);font-size:14px;font-weight:600;letter-spacing:-.2px}
+  .db-sub{font-size:9px;color:var(--i55);font-family:var(--mono);margin-top:1px}
+  .db-body{flex:1;overflow-y:auto;padding:12px 14px}
+  .db-body::-webkit-scrollbar{width:2px}
+  .db-body::-webkit-scrollbar-thumb{background:var(--i12)}
+
+  .db-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+  .db-stat{background:var(--white);border:.5px solid var(--border);border-radius:5px;padding:8px 10px;position:relative;overflow:hidden}
+  .db-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px}
+  .db-stat-l{font-size:7.5px;font-family:var(--mono);color:var(--i55);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px}
+  .db-stat-v{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1}
+  .db-stat-v.green{color:var(--green)}
+  .db-stat-v.gold{color:var(--gold)}
+  .db-stat-s{font-size:7.5px;color:var(--i55);font-family:var(--mono);margin-top:2px}
+
+  /* Mandate table inside mockup */
+  .m-table{width:100%;border-collapse:collapse;background:var(--white);border:.5px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:9px}
+  .m-th{font-size:7px;font-family:var(--mono);color:var(--i55);text-transform:uppercase;letter-spacing:.7px;padding:5px 8px;text-align:left;border-bottom:.5px solid var(--border);font-weight:400;background:var(--off)}
+  .m-td{padding:7px 8px;border-bottom:.5px solid var(--i06);font-size:9.5px}
+  .m-tr:hover .m-td{background:var(--off)}
+  .m-co{font-size:9.5px;font-weight:500;color:var(--ink)}
+  .m-meta{font-size:8px;color:var(--i55);font-family:var(--mono)}
+  .m-pill{display:inline-flex;font-size:7.5px;font-family:var(--mono);font-weight:500;padding:1.5px 5px;border-radius:5px}
+  .mp-green{background:var(--green-bg);color:var(--green)}
+  .mp-amber{background:var(--amber-bg);color:var(--amber)}
+  .mp-blue{background:var(--blue-bg);color:var(--blue)}
+  .mp-gold{background:rgba(184,149,42,.1);color:var(--gold)}
+  .mp-gray{background:var(--off);color:var(--i55)}
+  .m-bar-wrap{display:flex;align-items:center;gap:3px}
+  .m-bar-track{flex:1;height:2.5px;background:var(--i06);border-radius:2px;overflow:hidden;min-width:30px}
+  .m-bar-fill{height:100%;background:var(--gold);border-radius:2px}
+  .m-bar-lbl{font-size:8px;font-family:var(--mono);color:var(--i55);min-width:24px;text-align:right}
+
+  /* Blind queue inside mockup */
+  .blind-queue-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:.5px solid var(--i06);background:var(--white);cursor:pointer}
+  .blind-queue-item:last-child{border-bottom:none}
+  .blind-queue-item:hover{background:var(--off)}
+  .bq-left{flex:1;min-width:0}
+  .bq-mandate{font-size:9.5px;font-weight:500;color:var(--ink)}
+  .bq-meta{font-size:8px;font-family:var(--mono);color:var(--i55)}
+  .bq-arrow{font-size:14px;color:var(--i30);flex-shrink:0}
+  .bq-right{text-align:right;flex-shrink:0}
+  .bq-fund{font-size:9.5px;font-weight:500;color:var(--green)}
+  .bq-fmeta{font-size:8px;font-family:var(--mono);color:var(--i55)}
+  .bq-new{font-size:7.5px;font-family:var(--mono);padding:1px 5px;border-radius:4px;background:var(--green-bg);color:var(--green);margin-left:4px}
+  .shield-badge{display:inline-flex;align-items:center;gap:3px;font-size:7.5px;font-family:var(--mono);color:var(--i55);background:var(--off);padding:1.5px 5px;border-radius:4px}
+
+  /* DEPLOYMENT SIGNALS */
+  .signals-section{background:var(--ink);padding:96px 60px}
+  .signals-section .sl{color:var(--gold)}
+  .signals-section .sl::before{background:var(--gold)}
+  .signals-section .sh{color:var(--white)}
+  .signals-section .sb{color:rgba(255,255,255,.55)}
+  .signals-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:64px}
+
+  .heat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+  .heat-cell{background:var(--ink);border:.5px solid rgba(255,255,255,.08);border-radius:4px;padding:16px;position:relative;overflow:hidden;transition:border-color .2s}
+  .heat-cell:hover{border-color:rgba(255,255,255,.16)}
+  .heat-cell::before{content:'';position:absolute;inset:0;border-radius:4px;pointer-events:none}
+  .heat-cell.high::before{background:var(--green);opacity:.06}
+  .heat-cell.mid::before{background:var(--gold);opacity:.06}
+  .heat-cell.low::before{background:#b02020;opacity:.06}
+  .hc-sector{font-size:10px;font-weight:500;color:rgba(255,255,255,.7);margin-bottom:5px}
+  .hc-pct{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1}
+  .hc-pct.high{color:#2a8a50}
+  .hc-pct.mid{color:var(--gold)}
+  .hc-pct.low{color:#c0392b}
+  .hc-label{font-family:var(--mono);font-size:8.5px;color:rgba(255,255,255,.35);margin-top:3px}
+  .hc-bar{height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;margin-top:10px}
+  .hc-bar-fill{height:100%;border-radius:2px}
+
+  .dep-list{display:flex;flex-direction:column;gap:0}
+  .dep-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:.5px solid rgba(255,255,255,.06)}
+  .dep-item:last-child{border-bottom:none}
+  .dep-av{width:28px;height:28px;border-radius:4px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:600;font-family:var(--mono);color:rgba(255,255,255,.5);flex-shrink:0}
+  .dep-name{font-size:13px;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:2px}
+  .dep-meta{font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.35)}
+  .dep-status{margin-left:auto;font-family:var(--mono);font-size:9px;padding:2.5px 8px;border-radius:3px;flex-shrink:0}
+  .dep-s-active{background:var(--green-bg);color:var(--green)}
+  .dep-s-pause{background:var(--amber-bg);color:var(--amber)}
+  .dep-s-raising{background:var(--blue-bg);color:var(--blue)}
+  .dep-ticket{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);text-align:right;min-width:60px}
+
+  .signals-right{display:flex;flex-direction:column;gap:0}
+  .sig-rule{font-size:13.5px;font-weight:300;line-height:1.7;color:rgba(255,255,255,.55);display:flex;gap:12px;padding:16px 0;border-bottom:.5px solid rgba(255,255,255,.06)}
+  .sig-rule:first-child{border-top:.5px solid rgba(255,255,255,.06)}
+  .sig-rule::before{content:'—';color:var(--gold);flex-shrink:0}
+
+  /* DATA ROOM */
+  .dataroom-section{background:var(--parchment)}
+  .dr-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+  .dr-mockup{border:.5px solid var(--i12);border-radius:4px;overflow:hidden;background:var(--white)}
+  .dr-head{padding:14px 18px;border-bottom:.5px solid var(--i12);display:flex;align-items:center;justify-content:space-between;background:var(--white)}
+  .dr-title{font-size:13.5px;font-weight:500;color:var(--ink);font-family:var(--serif)}
+  .dr-badge{font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:3px;background:var(--green-bg);color:var(--green)}
+  .doc-row{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:.5px solid var(--i06);transition:background .12s}
+  .doc-row:hover{background:var(--off)}
+  .doc-row:last-child{border-bottom:none}
+  .doc-icon{width:28px;height:28px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .doc-icon.pdf{background:#fdf0f0;color:var(--red)}
+  .doc-icon.xls{background:var(--green-bg);color:var(--green)}
+  .doc-icon.ppt{background:var(--amber-bg);color:var(--amber)}
+  .doc-name{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px}
+  .doc-meta{font-size:9.5px;font-family:var(--mono);color:var(--i55)}
+  .doc-stats{margin-left:auto;text-align:right;flex-shrink:0}
+  .doc-opens{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink)}
+  .doc-time{font-family:var(--mono);font-size:9px;color:var(--i55);margin-top:1px}
+  .doc-heat{display:flex;gap:2px;margin-top:3px;justify-content:flex-end}
+  .doc-heat-dot{width:6px;height:6px;border-radius:50%}
+  .doc-heat-dot.hot{background:var(--green)}
+  .doc-heat-dot.warm{background:var(--gold)}
+  .doc-heat-dot.cold{background:var(--i12)}
+
+  .inv-open-row{display:flex;align-items:center;gap:10px;padding:9px 18px;border-bottom:.5px solid var(--i06)}
+  .inv-open-row:last-child{border-bottom:none}
+  .inv-open-av{width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;font-family:var(--mono);flex-shrink:0}
+  .inv-open-name{font-size:11px;font-weight:500;color:var(--ink);flex:1}
+  .inv-open-doc{font-size:9.5px;font-family:var(--mono);color:var(--i55)}
+  .inv-open-time{font-family:var(--mono);font-size:9.5px;color:var(--i55);margin-left:auto}
+  .inv-open-dur{font-family:var(--mono);font-size:9px;color:var(--green);margin-left:8px}
+
+  /* CO-PLACEMENT */
+  .coplacement-section{padding:96px 60px}
+  .cp-layout{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center}
+  .cp-cards{display:flex;flex-direction:column;gap:12px}
+  .cp-card{border:.5px solid var(--i12);padding:24px 28px;background:var(--white);transition:border-color .2s}
+  .cp-card:hover{border-color:var(--gold-border)}
+  .cp-card-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+  .cp-card-title{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--ink);margin-bottom:9px}
+  .cp-card-body{font-size:13px;font-weight:300;line-height:1.72;color:var(--i80)}
+  .cp-stat{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:.5px solid var(--i06)}
+  .cp-stat:last-child{border-bottom:none}
+  .cp-stat-l{font-size:12.5px;color:var(--i80)}
+  .cp-stat-v{font-family:var(--mono);font-size:12.5px;color:var(--ink);font-weight:500}
+  .cp-stat-v.green{color:var(--green)}
+
+  /* TIERS */
+  .tiers-section{background:var(--ink);padding:96px 60px}
+  .tiers-section .sl{color:var(--gold)}
+  .tiers-section .sl::before{background:var(--gold)}
+  .tiers-section .sh{color:var(--white)}
+  .tiers-section .sb{color:rgba(255,255,255,.55)}
+  .tiers-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.07);border:.5px solid rgba(255,255,255,.07);margin-top:60px}
+  .tier-card{background:var(--ink);padding:48px 40px;transition:background .2s;position:relative}
+  .tier-card:hover{background:#181714}
+  .tier-accent{height:2px;position:absolute;top:0;left:0;right:0}
+  .tier-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
+  .tier-name{font-family:var(--serif);font-size:24px;font-weight:400;color:var(--white);margin-bottom:6px}
+  .tier-who{font-size:13px;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:24px;line-height:1.6}
+  .tier-divider{height:.5px;background:rgba(255,255,255,.08);margin-bottom:22px}
+  .tier-includes-lbl{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px}
+  .tier-items{display:flex;flex-direction:column;gap:10px}
+  .tier-item{font-size:13px;font-weight:300;color:rgba(255,255,255,.55);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+  .tier-item::before{content:'—';color:var(--gold);flex-shrink:0}
+  .tier-qualify{margin-top:24px;padding-top:18px;border-top:.5px solid rgba(255,255,255,.08)}
+  .tq-lbl{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:8px}
+  .tq-items{display:flex;flex-direction:column;gap:5px}
+  .tq-item{font-size:11.5px;color:rgba(255,255,255,.38);display:flex;gap:8px}
+  .tq-item::before{content:'·';color:var(--gold);flex-shrink:0}
+
+  /* QUOTE */
+  .quote-wrap{border-top:.5px solid var(--i12);border-bottom:.5px solid var(--i12);background:var(--parchment);padding:96px 60px;display:flex;align-items:center;justify-content:center}
+  .quote-inner{max-width:620px;text-align:center}
+  .qm{font-family:var(--serif);font-size:64px;line-height:.4;color:var(--gold);display:block;margin-bottom:28px}
+  .qt{font-family:var(--serif);font-size:24px;font-weight:400;line-height:1.52;color:var(--ink);font-style:italic;margin-bottom:28px}
+  .qa{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--i55)}
+
+  /* CTA */
+  .cta-section{background:var(--ink);padding:112px 60px}
+  .cta-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+  .cta-left .sh{color:var(--white)}
+  .cta-left .sl{color:var(--gold)}
+  .cta-left .sl::before{background:var(--gold)}
+  .cta-left .sb{color:rgba(255,255,255,.55);max-width:400px}
+  .cta-steps{display:flex;flex-direction:column;gap:0;margin-top:40px}
+  .cta-step{display:flex;gap:20px;padding:22px 0;border-bottom:.5px solid rgba(255,255,255,.07)}
+  .cta-step:first-child{border-top:.5px solid rgba(255,255,255,.07)}
+  .cs-num{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--gold);flex-shrink:0;padding-top:3px;width:24px}
+  .cs-title{font-size:14px;font-weight:500;color:var(--white);margin-bottom:5px}
+  .cs-body{font-size:13px;font-weight:300;color:rgba(255,255,255,.45);line-height:1.65}
+  .cta-box-wrap{display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,.08);border:.5px solid rgba(255,255,255,.08)}
+  .cta-box{background:var(--ink);padding:40px;transition:background .2s}
+  .cta-box:hover{background:#181714}
+  .cbl{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+  .cbt{font-family:var(--serif);font-size:21px;font-weight:400;color:var(--white);margin-bottom:12px;line-height:1.2}
+  .cbb{font-size:13.5px;font-weight:300;color:rgba(255,255,255,.50);line-height:1.75;margin-bottom:24px}
+  .btn-p-light{display:inline-flex;align-items:center;gap:10px;background:var(--white);color:var(--ink);font-size:11.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:14px 30px;border-radius:2px;text-decoration:none;transition:background .2s}
+  .btn-p-light:hover{background:var(--gold);color:var(--white)}
+  .btn-p-light svg{width:13px;height:13px;stroke:currentColor;fill:none;transition:transform .2s}
+  .btn-p-light:hover svg{transform:translateX(3px)}
+
+  /* FOOTER */
+  footer{background:#080807;padding:68px 60px 44px}
+  .ft-top{display:grid;grid-template-columns:300px 1fr;gap:80px;padding-bottom:52px;border-bottom:.5px solid rgba(255,255,255,.07);margin-bottom:36px}
+  .ft-wm{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--white);display:block;margin-bottom:14px}
+  .ft-wm span{color:var(--gold)}
+  .ft-tag{font-size:13px;font-weight:300;line-height:1.7;color:rgba(255,255,255,.36);margin-bottom:20px}
+  .ft-fine{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:rgba(255,255,255,.18);line-height:1.7}
+  .ft-links{display:grid;grid-template-columns:repeat(3,1fr);gap:44px}
+  .ft-ctitle{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:18px}
+  .ft-col a{display:block;font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;margin-bottom:11px;transition:color .18s}
+  .ft-col a:hover{color:var(--gold)}
+  .ft-bot{display:flex;align-items:center;justify-content:space-between}
+  .ft-copy{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:rgba(255,255,255,.2)}
+  .ft-reg{font-family:var(--mono);font-size:9.5px;color:rgba(255,255,255,.2);display:flex;align-items:center;gap:18px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="index.html">
+    <span class="nav-wm">T<span>C</span>R</span>
+    <span class="nav-tag">The Capital Room</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#math">The Math</a></li>
+    <li><a href="#matching">Mandate Matching</a></li>
+    <li><a href="#signals">Deployment Signals</a></li>
+    <li><a href="#dataroom">Data Room</a></li>
+    <li><a href="#tiers">Access Tiers</a></li>
+    <li><a href="#access" class="nav-cta">IB Access Enquiry</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-line"></div>
+
+  <div class="hero-signal">
+    <div class="hs-pulse"></div>
+    <span class="hs-text"><strong>For SEBI-registered investment banks and M&A advisory firms.</strong> Mid-market to boutique. No floor on deal size.</span>
+    <div class="hs-div"></div>
+    <span class="hs-text">Platform in build. <strong>IB access open now.</strong></span>
+  </div>
+
+  <div class="hero-ey">For Investment Banks</div>
+
+  <h1 class="hero-h1">
+    Every mandate has<br>a ceiling. TCR<br><em>raises it.</em>
+  </h1>
+
+  <p class="hero-sub">
+    Your investor relationships are the foundation of every mandate you run. For the deal that exceeds them, TCR's verified fund network fills the gap — matched to the specific mandate, not the general market. Every introduction carries your firm's name. TCR does not appear in the investor conversation.
+  </p>
+
+  <div class="hero-acts">
+    <a href="#access" class="btn-p">
+      IB Access Enquiry
+      <svg viewBox="0 0 24 24" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <a href="#matching" class="btn-g">How mandate matching works</a>
+  </div>
+
+  <div class="hero-aside">
+    <div class="hs-s"><span class="hs-num" style="font-size:16px;letter-spacing:-.3px">Your network</span><span class="hs-lbl">Private · never shared</span></div>
+    <div class="hs-rule"></div>
+    <div class="hs-s"><span class="hs-num" style="font-size:16px;letter-spacing:-.3px">+ TCR's network</span><span class="hs-lbl">Per mandate · named · deploy-checked</span></div>
+    <div class="hs-rule"></div>
+    <div class="hs-s"><span class="hs-num" style="font-size:16px;letter-spacing:-.3px">Your name</span><span class="hs-lbl">On every introduction</span></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ti"><span class="td" style="background:var(--green)"></span>Mandate-based Matching · Submit a Raise · TCR Surfaces Relevant Funds</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>Verified Fund Network · Named · Deploy-checked · Mandate-specific</div>
+    <div class="ti"><span class="td" style="background:var(--green)"></span>Your Relationships Stay Yours · Other IBs Cannot See Your Network</div>
+    <div class="ti"><span class="td" style="background:var(--blue)"></span>Access-Tracked Data Room · Engagement by Investor · Document by Document</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>Deployment Signals · Active vs Paused · By Sector · Updated Weekly</div>
+    <div class="ti"><span class="td" style="background:var(--green)"></span>TCR Deal Flow · Co-place on Live Mandates · Every Introduction Under Your Name</div>
+    <div class="ti"><span class="td" style="background:var(--blue)"></span>Pool × TCR Overlap · Your Existing Relationships · Enriched with Deployment Data</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>Sector Heat Map · Healthtech High · Fintech Selective · SaaS Mid</div>
+    <!-- duplicate -->
+    <div class="ti"><span class="td" style="background:var(--green)"></span>Mandate-based Matching · Submit a Raise · TCR Surfaces Relevant Funds</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>Verified Fund Network · Named · Deploy-checked · Mandate-specific</div>
+    <div class="ti"><span class="td" style="background:var(--green)"></span>Your Relationships Stay Yours · Other IBs Cannot See Your Network</div>
+    <div class="ti"><span class="td" style="background:var(--blue)"></span>Access-Tracked Data Room · Engagement by Investor · Document by Document</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>Deployment Signals · Active vs Paused · By Sector · Updated Weekly</div>
+    <div class="ti"><span class="td" style="background:var(--green)"></span>TCR Deal Flow · Co-place on Live Mandates · Every Introduction Under Your Name</div>
+    <div class="ti"><span class="td" style="background:var(--blue)"></span>Pool × TCR Overlap · Your Existing Relationships · Enriched with Deployment Data</div>
+    <div class="ti"><span class="td" style="background:var(--gold)"></span>Sector Heat Map · Healthtech High · Fintech Selective · SaaS Mid</div>
+  </div>
+</div>
+
+<!-- THE MATH — pure arithmetic, no fluff -->
+<div class="math-section" id="math">
+  <div class="math-inner">
+    <div class="math-cell fade">
+      <div class="math-label">Your investor relationships</div>
+      <div class="math-num white" style="font-size:clamp(28px,3vw,44px);letter-spacing:-.3px;line-height:1.15">Built.<br>Private.<br>Yours.</div>
+      <div class="math-divider"></div>
+      <p class="math-desc">The foundation of every mandate you run. No other IB on TCR has visibility into your relationships. For every deal that fits within them, you close it on your own terms.</p>
+      <div class="math-note" style="margin-top:16px">TCR uses sector, stage, and ticket metadata for matching. Investor identity stays in your account.</div>
+    </div>
+    <div class="math-cell fade d1" style="border-left:.5px solid rgba(255,255,255,.07)">
+      <div class="math-label">TCR's verified fund network</div>
+      <div class="math-num green" style="font-size:clamp(28px,3vw,44px);letter-spacing:-.3px;line-height:1.15">Matched.<br>Named.<br>Deploy-checked.</div>
+      <div class="math-divider"></div>
+      <p class="math-desc">When you submit a mandate, TCR surfaces the funds whose sector, stage, and ticket align with it. Funds you already know are excluded. What remains is net new — with current deployment status confirmed before you approach a single investor.</p>
+      <div class="math-note" style="margin-top:16px">Every introduction you make carries your firm's name. TCR does not appear in the investor conversation.</div>
+    </div>
+    <div class="math-cell fade d2" style="border-left:.5px solid rgba(255,255,255,.07)">
+      <div class="math-label">The two combined</div>
+      <div class="math-num gold" style="font-size:clamp(28px,3vw,44px);letter-spacing:-.3px;line-height:1.15">Every mandate.<br>Every fund<br>it needs.</div>
+      <div class="math-divider"></div>
+      <p class="math-desc">Your relationships anchor every deal with the trust you have built. TCR's network provides the reach your relationships don't yet cover. The mandate that previously stalled at the edge of your network — closes.</p>
+      <div class="math-note" style="margin-top:16px">Where your network and TCR's overlap, TCR provides deployment intelligence on funds you already know.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MANDATE MATCHING SECTION -->
+<section class="blind-section" id="matching">
+  <div class="blind-layout">
+    <div class="fade">
+      <div class="sl">Mandate Matching</div>
+      <h2 class="sh">The right fund for<br>this mandate.<br><em>Not the market.</em></h2>
+      <p class="sb">TCR matches against the mandate — sector, stage, raise size, investor profile. What it surfaces is specific to what you submitted, cross-referenced against your existing relationships to ensure every suggestion is genuinely new.</p>
+
+      <div style="margin-top:48px;display:flex;flex-direction:column;gap:0">
+        <div class="feature-rule fade">
+          <span class="fr-num">01</span>
+          <div>
+            <div class="fr-title">Mandate-specific, not directory-wide</div>
+            <p class="fr-body">TCR's fund network is not a list you browse. Submit a mandate and the platform runs the match — returning only the funds whose parameters align with that specific raise. The result is a shortlist, not a database.</p>
+          </div>
+        </div>
+        <div class="feature-rule fade d1">
+          <span class="fr-num">02</span>
+          <div>
+            <div class="fr-title">Your existing relationships excluded automatically</div>
+            <p class="fr-body">TCR cross-references your registered investor network against its fund registry before surfacing any match. Funds you already know appear separately, enriched with deployment status. What TCR surfaces as new is net new.</p>
+            <div class="fr-tag">No redundant introductions</div>
+          </div>
+        </div>
+        <div class="feature-rule fade d2">
+          <span class="fr-num">03</span>
+          <div>
+            <div class="fr-title">Every matched fund is named and deploy-checked</div>
+            <p class="fr-body">Deployment status is confirmed before any fund is surfaced to you. A fund on pause is not shown as a match for an active mandate. What you receive is a shortlist of funds that are verified, named, and currently deploying in the relevant sector.</p>
+          </div>
+        </div>
+        <div class="feature-rule fade d3">
+          <span class="fr-num">04</span>
+          <div>
+            <div class="fr-title">Your introduction. Your firm's name.</div>
+            <p class="fr-body">You decide which matched funds to approach. The introduction you send carries your firm's name. TCR does not appear in the investor conversation at any stage of the mandate.</p>
+            <div class="fr-tag">Your brand · On every introduction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POOL VISUAL -->
+    <div class="fade d2">
+      <div class="pool-visual">
+        <div class="pv-header">
+          <div class="pv-title">Investor Network — Aryan Shah · Veritas Advisory</div>
+          <div class="pv-live">Active</div>
+        </div>
+        <div class="pv-cols">
+          <!-- Your network -->
+          <div class="pv-col">
+            <div class="pv-col-label own">Your network · Private</div>
+            <div class="pv-count own" style="font-size:22px;letter-spacing:-.5px">Your investors</div>
+            <div class="pv-desc">Your relationships. Fully private. No other IB on TCR can see who you know.</div>
+            <div class="inv-chip">
+              <div class="inv-chip-av own">—</div>
+              <div class="inv-chip-name blurred">████ Capital</div>
+              <span class="tag-lock">⚿</span>
+            </div>
+            <div class="inv-chip">
+              <div class="inv-chip-av own">—</div>
+              <div class="inv-chip-name blurred">███ Ventures</div>
+              <span class="tag-lock">⚿</span>
+            </div>
+            <div class="inv-chip">
+              <div class="inv-chip-av own">—</div>
+              <div class="inv-chip-name blurred">██ Family Office</div>
+              <span class="tag-lock">⚿</span>
+            </div>
+          </div>
+          <!-- TCR matched -->
+          <div class="pv-col center">
+            <div class="pv-col-label tcr">TCR mandate match</div>
+            <div class="pv-count tcr" style="font-size:22px;letter-spacing:-.5px">Named funds</div>
+            <div class="pv-desc" style="color:var(--green);text-align:center">Surfaced per mandate. Named. Deploy-checked. Net new to your network.</div>
+            <div class="inv-chip" style="border-color:var(--green-border)">
+              <div class="inv-chip-av tcr">BL</div>
+              <div class="inv-chip-name">Blume Ventures</div>
+              <span class="inv-chip-tag tag-new">NEW</span>
+            </div>
+            <div class="inv-chip" style="border-color:var(--green-border)">
+              <div class="inv-chip-av tcr">AC</div>
+              <div class="inv-chip-name">Accel India</div>
+              <span class="inv-chip-tag tag-new">NEW</span>
+            </div>
+            <div class="inv-chip" style="border-color:var(--green-border)">
+              <div class="inv-chip-av tcr">OP</div>
+              <div class="inv-chip-name">Omnivore</div>
+              <span class="inv-chip-tag tag-new">NEW</span>
+            </div>
+          </div>
+          <!-- Total -->
+          <div class="pv-col right-col">
+            <div class="pv-col-label total">Combined reach</div>
+            <div class="pv-count total" style="font-size:22px;letter-spacing:-.5px">Meaningfully more</div>
+            <div class="pv-desc" style="color:var(--amber)">Your relationships bring trust. TCR's network brings reach. Together, mandates that couldn't close — can.</div>
+            <div class="pv-total-box">
+              <div class="ptb-label" style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:6px">Every introduction under your firm's name</div>
+              <div class="ptb-fine">TCR is designed not to appear in the investor conversation. Your network overlap with TCR's registry is identified and enriched — not exposed to other IBs.</div>
+            </div>
+          </div>
+        </div>
+        <div class="brand-bar">
+          <div class="bb-icon">◈</div>
+          <div class="bb-text"><strong>Your name. Every introduction.</strong> Every memo, every call — under your firm's name. Your investor network is not visible to any other IB on the platform.</div>
+        </div>
+      </div>
+
+      <!-- Dashboard mockup below pool visual -->
+      <div style="margin-top:16px">
+        <div class="mockup">
+          <div class="mockup-bar">
+            <div class="mb-dots">
+              <div class="mb-dot" style="background:#e8453c"></div>
+              <div class="mb-dot" style="background:#f5a623"></div>
+              <div class="mb-dot" style="background:#27c93f"></div>
+            </div>
+            <span class="mb-label">TCR · IB Dashboard — Mandate Matches</span>
+          </div>
+          <div class="db-shell">
+            <div class="db-nav">
+              <div class="db-logo">TC<span>R</span></div>
+              <div class="db-sec">Mandates</div>
+              <div class="db-item">◈ Active raises <span class="db-badge dbb-gold">3</span></div>
+              <div class="db-item active">↗ TCR matches <span class="db-badge dbb-green">8</span></div>
+              <div class="db-item">✓ Closed deals <span class="db-badge dbb-amber">11</span></div>
+              <div class="db-item">⬡ TCR deal flow <span class="db-badge dbb-blue">9</span></div>
+              <div class="db-sec">Network</div>
+              <div class="db-item">⊕ My pool <span class="db-badge dbb-blue">48</span></div>
+              <div class="db-item">◎ TCR expansion</div>
+              <div class="db-sec">Intelligence</div>
+              <div class="db-item">▦ Sector signals</div>
+              <div class="db-item">▣ Deployment tracker</div>
+              <div style="margin-top:auto;padding-top:8px;border-top:.5px solid var(--border)">
+                <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:var(--parchment);border-radius:4px">
+                  <div style="width:22px;height:22px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:var(--white);font-family:var(--mono)">AS</div>
+                  <div><div style="font-size:9px;font-weight:500">Aryan Shah</div><div style="font-size:7.5px;font-family:var(--mono);color:var(--i55)">Veritas · Pro</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="db-main">
+              <div class="db-topbar">
+                <div>
+                  <div class="db-ey">Mandate Matches</div>
+                  <div class="db-title">Aastey Series A · matched funds</div>
+                  <div class="db-sub">Named · deploy-checked · net new to your network</div>
+                </div>
+                <div style="font-family:var(--mono);font-size:8.5px;color:var(--green);display:flex;align-items:center;gap:4px">
+                  <div style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite"></div>Live
+                </div>
+              </div>
+              <div class="db-body">
+                <div class="db-stats">
+                  <div class="db-stat"><div class="db-stat-l">This mandate</div><div class="db-stat-v gold" style="font-size:15px">8</div></div>
+                  <div class="db-stat"><div class="db-stat-l">High fit</div><div class="db-stat-v green" style="font-size:15px">5</div></div>
+                  <div class="db-stat"><div class="db-stat-l">Deploying now</div><div class="db-stat-v green" style="font-size:15px">6</div></div>
+                  <div class="db-stat"><div class="db-stat-l">Net new to you</div><div class="db-stat-v green" style="font-size:15px">8</div></div>
+                </div>
+                <div style="background:var(--white);border:.5px solid var(--border);border-radius:4px;overflow:hidden">
+                  <div style="padding:7px 10px;border-bottom:.5px solid var(--border);background:var(--off)"><span style="font-size:7.5px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.7px;color:var(--i55)">Funds matched to Aastey Series A · named · not in your network · deploy-checked</span></div>
+                  <div class="blind-queue-item">
+                    <div class="bq-left"><div class="bq-mandate">Lighthouse India</div><div class="bq-meta">Impact · Series A lead · ₹5–15Cr</div></div>
+                    <div class="bq-arrow">→</div>
+                    <div class="bq-right"><div class="bq-fund" style="color:var(--green)">Deploying<span class="bq-new">Fit 91</span></div><div class="bq-fmeta">Consumer · Impact · Series A</div></div>
+                    <div style="padding:3px 8px;font-size:8px;font-family:var(--mono);background:var(--ink);color:var(--white);border-radius:3px;cursor:pointer;flex-shrink:0">Approach →</div>
+                  </div>
+                  <div class="blind-queue-item">
+                    <div class="bq-left"><div class="bq-mandate">Fireside Ventures</div><div class="bq-meta">Consumer D2C · co-lead · ₹3–8Cr</div></div>
+                    <div class="bq-arrow">→</div>
+                    <div class="bq-right"><div class="bq-fund" style="color:var(--green)">Deploying<span class="bq-new">Fit 87</span></div><div class="bq-fmeta">Consumer · Series A</div></div>
+                    <div style="padding:3px 8px;font-size:8px;font-family:var(--mono);background:var(--ink);color:var(--white);border-radius:3px;cursor:pointer;flex-shrink:0">Approach →</div>
+                  </div>
+                  <div class="blind-queue-item">
+                    <div class="bq-left"><div class="bq-mandate">Blume Ventures</div><div class="bq-meta">Series A · Consumer · ₹3–10Cr</div></div>
+                    <div class="bq-arrow">→</div>
+                    <div class="bq-right"><div class="bq-fund" style="color:var(--gold)">Deploying<span class="bq-new">Fit 78</span></div><div class="bq-fmeta">Consumer · SaaS</div></div>
+                    <div style="padding:3px 8px;font-size:8px;font-family:var(--mono);background:var(--ink);color:var(--white);border-radius:3px;cursor:pointer;flex-shrink:0">Approach →</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPLOYMENT SIGNALS -->
+<section class="signals-section" id="signals">
+  <div class="sl">Deployment Intelligence</div>
+  <h2 class="sh" style="color:var(--white)">Know which funds are<br>deploying before you<br><em>approach a single one.</em></h2>
+  <p class="sb">Deployment status is tracked across TCR's verified fund network — by sector, by stage, updated weekly. A fund on pause is a meeting that should not happen. A fund raising a new vehicle is a closing opportunity most IBs miss entirely.</p>
+
+  <div class="signals-layout">
+    <div>
+      <div style="margin-bottom:20px">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:12px">Sector heat · TCR network · This month</div>
+        <div class="heat-grid">
+          <div class="heat-cell high fade">
+            <div class="hc-sector">Healthtech</div>
+            <div class="hc-pct high">High</div>
+            <div class="hc-label">8 funds deploying</div>
+            <div class="hc-bar"><div class="hc-bar-fill" style="width:88%;background:var(--green)"></div></div>
+          </div>
+          <div class="heat-cell high fade d1">
+            <div class="hc-sector">Deep Tech</div>
+            <div class="hc-pct high">High</div>
+            <div class="hc-label">6 funds active</div>
+            <div class="hc-bar"><div class="hc-bar-fill" style="width:76%;background:var(--green)"></div></div>
+          </div>
+          <div class="heat-cell mid fade d2">
+            <div class="hc-sector">SaaS B2B</div>
+            <div class="hc-pct mid">Mid</div>
+            <div class="hc-label">Selective deployment</div>
+            <div class="hc-bar"><div class="hc-bar-fill" style="width:51%;background:var(--gold)"></div></div>
+          </div>
+          <div class="heat-cell mid fade">
+            <div class="hc-sector">Consumer</div>
+            <div class="hc-pct mid">Mid</div>
+            <div class="hc-label">Stage-specific</div>
+            <div class="hc-bar"><div class="hc-bar-fill" style="width:44%;background:var(--gold)"></div></div>
+          </div>
+          <div class="heat-cell low fade d1">
+            <div class="hc-sector">Fintech</div>
+            <div class="hc-pct low">Low</div>
+            <div class="hc-label">Pause on new mandates</div>
+            <div class="hc-bar"><div class="hc-bar-fill" style="width:28%;background:#c0392b"></div></div>
+          </div>
+          <div class="heat-cell mid fade d2">
+            <div class="hc-sector">EdTech</div>
+            <div class="hc-pct mid">Recovering</div>
+            <div class="hc-label">Selective re-entry</div>
+            <div class="hc-bar"><div class="hc-bar-fill" style="width:36%;background:var(--gold)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px">Fund deployment status · TCR verified network</div>
+      <div class="dep-list">
+        <div class="dep-item fade">
+          <div class="dep-av">BL</div>
+          <div style="flex:1"><div class="dep-name">Blume Ventures</div><div class="dep-meta">Consumer · Series A · ₹2–8Cr ticket</div></div>
+          <div class="dep-ticket">₹2–8Cr</div>
+          <div class="dep-status dep-s-active">● Deploying</div>
+        </div>
+        <div class="dep-item fade d1">
+          <div class="dep-av">OP</div>
+          <div style="flex:1"><div class="dep-name">Omnivore Partners</div><div class="dep-meta">Impact · Healthtech · Pre-A focus</div></div>
+          <div class="dep-ticket">₹3–6Cr</div>
+          <div class="dep-status dep-s-active">● Deploying</div>
+        </div>
+        <div class="dep-item fade d2">
+          <div class="dep-av">KC</div>
+          <div style="flex:1"><div class="dep-name">Kalaari Capital</div><div class="dep-meta">D2C · Consumer · Series A–B</div></div>
+          <div class="dep-ticket">₹5–15Cr</div>
+          <div class="dep-status dep-s-pause">◎ On pause</div>
+        </div>
+        <div class="dep-item fade d3">
+          <div class="dep-av">SV</div>
+          <div style="flex:1"><div class="dep-name">Stellaris VP</div><div class="dep-meta">B2B SaaS · Series A</div></div>
+          <div class="dep-ticket">₹4–12Cr</div>
+          <div class="dep-status dep-s-raising">◈ Fundraising</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signals-right fade d2">
+      <div style="margin-bottom:36px">
+        <div style="font-family:var(--serif);font-size:20px;font-weight:400;color:var(--white);margin-bottom:14px;line-height:1.25">What changes when you have this data</div>
+        <div class="sig-rule">Mandates go to funds that are actively deploying in the relevant sector. The pass rate from paused funds drops to zero.</div>
+        <div class="sig-rule">Sector intake decisions are data-driven. Healthtech is high. Fintech is paused. That determines which new mandates you take on and how you position existing ones.</div>
+        <div class="sig-rule">When a paused fund re-enters deployment, you receive the signal before the market does. First-mover on re-entry is a structural advantage.</div>
+        <div class="sig-rule">Funds raising a new vehicle are tracked separately. They frequently co-invest at smaller tickets to build LP relationships during the raise. These mandates close fast.</div>
+      </div>
+
+      <div style="background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);padding:28px">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Platform design targets</div>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div class="cp-stat" style="border-color:rgba(255,255,255,.06);padding:10px 0">
+            <span style="font-size:13px;color:rgba(255,255,255,.55)">Total mandates closed</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--white);font-weight:500">11</span>
+          </div>
+          <div class="cp-stat" style="border-color:rgba(255,255,255,.06);padding:10px 0">
+            <span style="font-size:13px;color:rgba(255,255,255,.55)">Capital placed via TCR</span>
+            <span style="font-family:var(--mono);font-size:14px;color:#2a8a50;font-weight:500">₹94Cr</span>
+          </div>
+          <div class="cp-stat" style="border-color:rgba(255,255,255,.06);padding:10px 0">
+            <span style="font-size:13px;color:rgba(255,255,255,.55)">Average time to close</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--white);font-weight:500">9.4 weeks</span>
+          </div>
+          <div class="cp-stat" style="border-color:rgba(255,255,255,.06);padding:10px 0">
+            <span style="font-size:13px;color:rgba(255,255,255,.55)">Closes involving TCR-matched funds</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--gold);font-weight:500">38%</span>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.2);margin-top:14px;line-height:1.5">Illustrative figures from TCR platform design. Actual results discussed on engagement.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA ROOM -->
+<section class="dataroom-section" id="dataroom">
+  <div class="dr-layout">
+    <div class="fade">
+      <div class="sl">Data Room</div>
+      <h2 class="sh">Every investor. Every<br>document. Every<br><em>signal — visible.</em></h2>
+      <p class="sb">The TCR data room replaces the silence that follows every deck you send with structured engagement data. Document-level tracking, investor-level activity timelines, and engagement signals across the room. In development alongside the platform.</p>
+
+      <div style="margin-top:44px;display:flex;flex-direction:column;gap:0">
+        <div class="feature-rule fade">
+          <span class="fr-num">01</span>
+          <div>
+            <div class="fr-title">Document-level tracking</div>
+            <p class="fr-body">Every document tracked individually — teaser, financial model, investor deck, cap table. Time opened, time spent, return visits. The investor who spent 22 minutes on the financial model and came back the next day is a different call from the one who opened the teaser once.</p>
+          </div>
+        </div>
+        <div class="feature-rule fade d1">
+          <span class="fr-num">02</span>
+          <div>
+            <div class="fr-title">Investor-level activity timeline</div>
+            <p class="fr-body">Each investor has their own timeline — every document they touched, in sequence, with timestamps. When you follow up, you know where they are in diligence. You do not have to ask.</p>
+          </div>
+        </div>
+        <div class="feature-rule fade d2">
+          <span class="fr-num">03</span>
+          <div>
+            <div class="fr-title">Room-level engagement signals</div>
+            <p class="fr-body">Which documents are attracting the most time across all investors in the room. If the financial model is where attention concentrates, the investor community has told you where the conversation is heading — before anyone says it.</p>
+          </div>
+        </div>
+        <div class="feature-rule fade d3">
+          <span class="fr-num">04</span>
+          <div>
+            <div class="fr-title">Outreach coordination — architecture in progress</div>
+            <p class="fr-body">How introductions are sent, tracked, and followed through — and when TCR steps in to coordinate between both parties — is being finalised. Founding IB participants shape how this layer is built.</p>
+            <div class="fr-tag">In development</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATA ROOM MOCKUP -->
+    <div class="fade d2">
+      <div class="dr-mockup">
+        <div class="dr-head">
+          <div class="dr-title">Aastey — Series A Data Room</div>
+          <div class="dr-badge">Access Tracked</div>
+        </div>
+
+        <!-- Documents -->
+        <div style="padding:10px 14px;border-bottom:.5px solid var(--i12);background:var(--off)">
+          <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:var(--i55)">Documents · Engagement by investor</div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon pdf">PDF</div>
+          <div style="flex:1">
+            <div class="doc-name">Executive Summary & Teaser</div>
+            <div class="doc-meta">Sent to 12 investors · 11 opened</div>
+          </div>
+          <div class="doc-stats">
+            <div class="doc-opens">11 opens</div>
+            <div class="doc-time">Avg. 4m 12s</div>
+            <div class="doc-heat">
+              <div class="doc-heat-dot hot"></div><div class="doc-heat-dot hot"></div><div class="doc-heat-dot hot"></div>
+              <div class="doc-heat-dot hot"></div><div class="doc-heat-dot warm"></div>
+            </div>
+          </div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon xls">XLS</div>
+          <div style="flex:1">
+            <div class="doc-name">Financial Model — 3yr</div>
+            <div class="doc-meta">Sent to 8 investors · 6 opened</div>
+          </div>
+          <div class="doc-stats">
+            <div class="doc-opens">6 opens</div>
+            <div class="doc-time">Avg. 9m 44s</div>
+            <div class="doc-heat">
+              <div class="doc-heat-dot hot"></div><div class="doc-heat-dot hot"></div><div class="doc-heat-dot warm"></div>
+              <div class="doc-heat-dot cold"></div><div class="doc-heat-dot cold"></div>
+            </div>
+          </div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon ppt">PPT</div>
+          <div style="flex:1">
+            <div class="doc-name">Investor Deck — Full</div>
+            <div class="doc-meta">Sent to 8 investors · 7 opened</div>
+          </div>
+          <div class="doc-stats">
+            <div class="doc-opens">7 opens</div>
+            <div class="doc-time">Avg. 6m 30s</div>
+            <div class="doc-heat">
+              <div class="doc-heat-dot hot"></div><div class="doc-heat-dot hot"></div><div class="doc-heat-dot hot"></div>
+              <div class="doc-heat-dot warm"></div><div class="doc-heat-dot cold"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Investor activity -->
+        <div style="padding:10px 14px;border-top:.5px solid var(--i12);border-bottom:.5px solid var(--i12);background:var(--off)">
+          <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:var(--i55)">Investor activity · Last 7 days</div>
+        </div>
+        <div class="inv-open-row">
+          <div class="inv-open-av" style="background:var(--blue-bg);color:var(--blue)">BL</div>
+          <div class="inv-open-name">Blume Ventures</div>
+          <div class="inv-open-doc">Financial Model</div>
+          <div class="inv-open-time">2h ago</div>
+          <div class="inv-open-dur">22m 14s</div>
+        </div>
+        <div class="inv-open-row">
+          <div class="inv-open-av" style="background:var(--green-bg);color:var(--green)">AC</div>
+          <div class="inv-open-name">Accel India</div>
+          <div class="inv-open-doc">Investor Deck</div>
+          <div class="inv-open-time">5h ago</div>
+          <div class="inv-open-dur">8m 40s</div>
+        </div>
+        <div class="inv-open-row">
+          <div class="inv-open-av" style="background:rgba(184,149,42,.1);color:var(--gold)">KC</div>
+          <div class="inv-open-name">Kalaari Capital</div>
+          <div class="inv-open-doc">Executive Summary</div>
+          <div class="inv-open-time">Yesterday</div>
+          <div class="inv-open-dur">1m 12s</div>
+        </div>
+        <div class="inv-open-row" style="border-bottom:none">
+          <div class="inv-open-av" style="background:var(--green-bg);color:var(--green)">BL</div>
+          <div class="inv-open-name">Blume Ventures</div>
+          <div class="inv-open-doc">Financial Model</div>
+          <div class="inv-open-time">Yesterday</div>
+          <div class="inv-open-dur" style="color:var(--gold)">2nd open</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding:16px 20px;border:.5px solid var(--gold-border);background:var(--gold-pale)">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">What the data room changes</div>
+        <p style="font-size:13px;font-weight:300;color:var(--i80);line-height:1.7">Blume opened the financial model twice. Call them. Kalaari opened the teaser once and has not returned. Move on. Accel has spent time on the deck but not the model — send the model with a note on unit economics. The follow-up is no longer a guess.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CO-PLACEMENT / DEAL FLOW -->
+<section class="coplacement-section" id="coplacement">
+  <div class="cp-layout">
+    <div class="fade">
+      <div class="sl">TCR Deal Flow</div>
+      <h2 class="sh">Deal flow you did not<br>originate. Introductions<br><em>you still own.</em></h2>
+      <p class="sb">TCR runs mandates for companies raising directly through the platform. IBs on TCR co-place on these mandates — bringing their investor network alongside TCR's. Every introduction carries the IB's firm name.</p>
+
+      <div style="margin-top:44px;display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;gap:24px;padding:22px 0;border-top:.5px solid var(--i12);border-bottom:.5px solid var(--i12)">
+          <span style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--i30);flex-shrink:0;padding-top:3px;width:28px">01</span>
+          <div>
+            <div style="font-size:15px;font-weight:500;color:var(--ink);margin-bottom:7px">Live mandates, filtered to your network's sector coverage</div>
+            <p style="font-size:13.5px;font-weight:300;color:var(--i80);line-height:1.7">9 mandates live at any given time. Filter by sector, stage, and pool fit. Each mandate shows a fit score against your investor pool before you commit to co-placing.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:24px;padding:22px 0;border-bottom:.5px solid var(--i12)">
+          <span style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--i30);flex-shrink:0;padding-top:3px;width:28px">02</span>
+          <div>
+            <div style="font-size:15px;font-weight:500;color:var(--ink);margin-bottom:7px">You bring your network. The introduction is yours.</div>
+            <p style="font-size:13.5px;font-weight:300;color:var(--i80);line-height:1.7">When you express interest on a TCR mandate, you get full deal detail — financials, data room access, founder contacts. You bring your pool. TCR brings its network. Every introduction is structured to go under your firm's name.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:24px;padding:22px 0;border-bottom:.5px solid var(--i12)">
+          <span style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--i30);flex-shrink:0;padding-top:3px;width:28px">03</span>
+          <div>
+            <div style="font-size:15px;font-weight:500;color:var(--ink);margin-bottom:7px">Co-placed mandates sit alongside your own in a single dashboard</div>
+            <p style="font-size:13.5px;font-weight:300;color:var(--i80);line-height:1.7">Co-placed mandates sit alongside your own mandates in the same dashboard. You see the full raise timeline — which investors TCR has reached, which your pool has, and where the combined effort is in the close process.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cp-cards fade d2">
+      <div style="border:.5px solid var(--i12);border-radius:3px;overflow:hidden;background:var(--white);margin-bottom:14px">
+        <div style="padding:12px 18px;border-bottom:.5px solid var(--i12);background:var(--off);display:flex;align-items:center;justify-content:space-between">
+          <div style="font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--i55)">TCR deal flow — live mandates</div>
+          <span style="font-family:var(--mono);font-size:8.5px;padding:2px 7px;border-radius:3px;background:var(--blue-bg);color:var(--blue)">9 open</span>
+        </div>
+        <!-- Deal card -->
+        <div style="padding:14px 18px;border-bottom:.5px solid var(--i12)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+            <div>
+              <div style="font-family:var(--serif);font-size:13.5px;font-weight:600;margin-bottom:3px">Aastey</div>
+              <div style="font-size:9.5px;font-family:var(--mono);color:var(--i55)">D2C · Wellness · Series A</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:var(--serif);font-size:16px;font-weight:600">₹12Cr</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--i55)">Series A · 68% filled</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:center">
+            <div><div style="font-size:8px;font-family:var(--mono);color:var(--i55);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">Stage</div><div style="font-size:11px;font-weight:500">Series A</div></div>
+            <div><div style="font-size:8px;font-family:var(--mono);color:var(--i55);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">Sector</div><div style="font-size:11px;font-weight:500">Consumer</div></div>
+            <div><div style="font-size:8px;font-family:var(--mono);color:var(--i55);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">Pool fit</div><div style="font-size:11px;font-weight:500;color:var(--green)">High</div></div>
+            <div style="background:var(--green-bg);border:.5px solid var(--green-border);border-radius:4px;padding:7px 10px;text-align:center">
+              <div style="font-family:var(--serif);font-size:17px;font-weight:600;color:var(--green);line-height:1">87</div>
+              <div style="font-size:8px;font-family:var(--mono);color:var(--i55);margin-top:1px">Fit score</div>
+            </div>
+          </div>
+        </div>
+        <!-- Deal card 2 -->
+        <div style="padding:14px 18px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+            <div>
+              <div style="font-family:var(--serif);font-size:13.5px;font-weight:600;margin-bottom:3px">Medzeal Health</div>
+              <div style="font-size:9.5px;font-family:var(--mono);color:var(--i55)">Healthtech AI · Pre-Series A</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:var(--serif);font-size:16px;font-weight:600">₹8Cr</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--i55)">Pre-A · 30% filled</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:center">
+            <div><div style="font-size:8px;font-family:var(--mono);color:var(--i55);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">Stage</div><div style="font-size:11px;font-weight:500">Pre-A</div></div>
+            <div><div style="font-size:8px;font-family:var(--mono);color:var(--i55);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">Sector</div><div style="font-size:11px;font-weight:500">Healthtech</div></div>
+            <div><div style="font-size:8px;font-family:var(--mono);color:var(--i55);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">Pool fit</div><div style="font-size:11px;font-weight:500;color:var(--green)">High</div></div>
+            <div style="background:var(--green-bg);border:.5px solid var(--green-border);border-radius:4px;padding:7px 10px;text-align:center">
+              <div style="font-family:var(--serif);font-size:17px;font-weight:600;color:var(--green);line-height:1">91</div>
+              <div style="font-size:8px;font-family:var(--mono);color:var(--i55);margin-top:1px">Fit score</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:20px 24px;border:.5px solid var(--i12);background:var(--off)">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--i55);margin-bottom:12px">Live deal flow — illustrative snapshot</div>
+        <div class="cp-stat"><span class="cp-stat-l">TCR mandates live</span><span class="cp-stat-v">9 open</span></div>
+        <div class="cp-stat"><span class="cp-stat-l">High pool fit for your sector</span><span class="cp-stat-v green">4</span></div>
+        <div class="cp-stat"><span class="cp-stat-l">Capital available across mandates</span><span class="cp-stat-v">₹67Cr</span></div>
+        <div class="cp-stat"><span class="cp-stat-l">Your introduction on every close</span><span class="cp-stat-v green">Always</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section class="tiers-section" id="tiers">
+  <div class="sl">IB Access Tiers</div>
+  <h2 class="sh" style="color:var(--white)">Two tiers.<br>Both structured<br><em>around your mandates.</em></h2>
+  <p class="sb">Access tier is engagement-based — no subscription commitment required. Pro tier is for IBs with sustained mandate volume who want priority matching, unlimited submissions, and deployment intelligence as a standing service.</p>
+
+  <div class="tiers-grid">
+    <!-- ACCESS TIER -->
+    <div class="tier-card fade">
+      <div class="tier-accent" style="background:var(--gold)"></div>
+      <div class="tier-label" style="color:var(--gold)">IB Access</div>
+      <div class="tier-name">Engagement-based entry</div>
+      <div class="tier-who">Mid-market IB · Pre-IPO boutique · M&A advisory firm · No floor on deal size · SEBI-registered financial advisor</div>
+      <div class="tier-divider"></div>
+      <div class="tier-includes-lbl">What's included</div>
+      <div class="tier-items">
+        <div class="tier-item">Investor network registered privately — not visible to other IBs on the platform</div>
+        <div class="tier-item">Mandate-based matching against TCR's verified fund network — named, deploy-checked, net new to your relationships</div>
+        <div class="tier-item">Every introduction under your firm's name</div>
+        <div class="tier-item">Access-tracked data room — document and investor-level engagement tracking</div>
+        <div class="tier-item">Mandate raise timeline — touchpoints tracked from first match to close</div>
+        <div class="tier-item">TCR deal flow — co-place on platform-originated mandates</div>
+      </div>
+      <div class="tier-qualify">
+        <div class="tq-lbl">Qualification criteria</div>
+        <div class="tq-items">
+          <div class="tq-item">SEBI-registered investment bank or financial advisor</div>
+          <div class="tq-item">Active deal mandates in India</div>
+          <div class="tq-item">No floor on deal size or AUM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRO TIER -->
+    <div class="tier-card fade d1">
+      <div class="tier-accent" style="background:var(--green)"></div>
+      <div class="tier-label" style="color:#2a8a50">IB Pro</div>
+      <div class="tier-name">Subscription + priority access</div>
+      <div class="tier-who">Established IB with active deal pipeline · 5+ mandates per year · Seeking systematic reach beyond their existing investor relationships</div>
+      <div class="tier-divider"></div>
+      <div class="tier-includes-lbl">Everything in Access, plus</div>
+      <div class="tier-items">
+        <div class="tier-item">Unlimited mandate submissions</div>
+        <div class="tier-item">Priority matching — mandates surfaced to TCR's network before Access tier</div>
+        <div class="tier-item">Deployment intelligence — sector heat, active and paused fund status, weekly</div>
+        <div class="tier-item">Historical mandate benchmarking — close timelines, investor appetite by sector and stage</div>
+        <div class="tier-item">Placement memo and investor one-pager — TCR produces, you distribute</div>
+        <div class="tier-item">Cross-mandate investor continuity — structured reactivation between mandates</div>
+        <div class="tier-item">Deployment alerts — signal when a tracked fund moves to active deployment in your sector</div>
+      </div>
+      <div class="tier-qualify">
+        <div class="tq-lbl">Qualification criteria</div>
+        <div class="tq-items">
+          <div class="tq-item">5+ active mandates per year</div>
+          <div class="tq-item">Existing investor network of 20+ relationships</div>
+          <div class="tq-item">Commitment to TCR as primary mandate matching infrastructure</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-wrap">
+  <div class="quote-inner">
+    <span class="qm">"</span>
+    <p class="qt">Every IB has a point where their investor relationships run out before the mandate does. TCR is the infrastructure that exists on the other side of that point — matched to the mandate, not the general market, and structured so the introduction is always yours.</p>
+    <span class="qa">— The Capital Room · For Investment Banks</span>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section" id="access">
+  <div class="cta-layout">
+    <div class="cta-left fade">
+      <div class="sl">IB Access Enquiry</div>
+      <h2 class="sh">Submit your first<br>mandate. TCR returns<br><em>matched funds.</em></h2>
+      <p class="sb">Onboarding starts with a single conversation. Your investor network is registered, your first mandate is submitted, and TCR returns a named, deploy-checked shortlist. Engagement terms are discussed directly.</p>
+
+      <div class="cta-steps">
+        <div class="cta-step">
+          <span class="cs-num">01</span>
+          <div>
+            <div class="cs-title">Initial conversation</div>
+            <p class="cs-body">Firm, active mandates, investor network composition, sector focus. Direct access. Not a sales queue.</p>
+          </div>
+        </div>
+        <div class="cta-step">
+          <span class="cs-num">02</span>
+          <div>
+            <div class="cs-title">Investor network registered</div>
+            <p class="cs-body">TCR cross-references your network against its fund registry — identifying overlap for deployment intelligence and excluding known funds from new match suggestions.</p>
+          </div>
+        </div>
+        <div class="cta-step">
+          <span class="cs-num">03</span>
+          <div>
+            <div class="cs-title">First mandate submitted</div>
+            <p class="cs-body">Sector, round, raise size, investor profile. TCR returns a named shortlist of matched funds with deployment status confirmed. You decide who to approach. The introduction is yours.</p>
+          </div>
+        </div>
+        <div class="cta-step">
+          <span class="cs-num">04</span>
+          <div>
+            <div class="cs-title">Data room and tracking active</div>
+            <p class="cs-body">Data room set up for the mandate. Investor engagement tracked by document from the point of first send. Every follow-up informed by what the data shows, not what you can assume.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade d2">
+      <div class="cta-box-wrap">
+        <div class="cta-box">
+          <div class="cbl">IB Access</div>
+          <div class="cbt">Mandate-matched funds. Your network, extended.</div>
+          <p class="cbb">Register your investor network. Submit a mandate. Receive a named, deploy-checked shortlist of funds that fit — and are not already in your relationships. Every introduction under your firm's name.</p>
+          <a href="mailto:hello@thecapitalroom.in?subject=IB Access — Mandate Enquiry" class="btn-p-light">
+            IB Access Enquiry
+            <svg viewBox="0 0 24 24" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+        <div class="cta-box">
+          <div class="cbl">IB Pro</div>
+          <div class="cbt">Priority matching, deployment intelligence, unlimited mandates.</div>
+          <p class="cbb">For IBs with sustained mandate volume. Priority matching, sector heat signals, deployment tracking, placement memo generation, and cross-mandate investor continuity — as a standing service.</p>
+          <a href="mailto:hello@thecapitalroom.in?subject=IB Pro — Access Enquiry" style="font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;display:inline-flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:2px">IB Pro enquiry →</a>
+        </div>
+        <div class="cta-box" style="padding:24px 40px;background:#0a0906">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:12px">What does not change</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:13px;color:rgba(255,255,255,.45);display:flex;gap:10px"><span style="color:var(--gold);flex-shrink:0">—</span>Your investor network is private to your account. No other IB on the platform sees it.</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.45);display:flex;gap:10px"><span style="color:var(--gold);flex-shrink:0">—</span>Every introduction carries your firm's name. TCR does not appear in the investor conversation.</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.45);display:flex;gap:10px"><span style="color:var(--gold);flex-shrink:0">—</span>Outreach and coordination mechanics are being built. Founding IBs shape how the layer works.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <span class="ft-wm">T<span>C</span>R</span>
+      <p class="ft-tag">The Capital Room is India's private capital platform. For investment banks, TCR provides mandate-based matching against a verified fund network, deployment intelligence, and a structured data room — with every introduction under the IB's firm name.</p>
+      <p class="ft-fine">Platform launching Q3 2025. IB access currently available as a structured service.<br>Your investor network is private to your account and never shared with other IBs on the platform. TCR does not place capital.</p>
+    </div>
+    <div class="ft-links">
+      <div class="ft-col">
+        <div class="ft-ctitle">For IBs</div>
+        <a href="#">Access Tier</a>
+        <a href="#">Pro Tier</a>
+        <a href="#">Mandate Matching</a>
+        <a href="#">Data Room</a>
+        <a href="#">TCR Deal Flow</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-ctitle">Platform</div>
+        <a href="#">Fund Registry</a>
+        <a href="#">Deployment Signals</a>
+        <a href="#">Sector Intelligence</a>
+        <a href="#">TCR Ecosystem</a>
+        <a href="#">For Fund Managers</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-ctitle">Company</div>
+        <a href="#">About TCR</a>
+        <a href="#">Methodology</a>
+        <a href="#">Other Participants</a>
+        <a href="#">Data Sources</a>
+        <a href="#">hello@thecapitalroom.in</a>
+      </div>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <div class="ft-copy">© 2025 The Capital Room. All rights reserved.</div>
+    <div class="ft-reg"><span>SEBI-registered IBs only · Hashed pool · Brand protected</span><span>New Delhi, India</span></div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('in'); }), {threshold:0.1});
+  document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+  let lastY = 0;
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    nav.style.transform = (y > lastY && y > 100) ? 'translateY(-100%)' : 'translateY(0)';
+    lastY = y;
+  }, {passive:true});
+</script>
+</body>
+</html>
